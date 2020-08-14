@@ -1,55 +1,59 @@
-let data;
-let dataLocation;
-let weatherLocation;
-let weatherCoords = [];
+let yo;
+let weatherLocation = ("Viborg, Denmark"); // lokalitet som string
+let weatherCoords = []; // lokalitet som koordinater
+let data =  // hentet data i json format
+{
+  location: [], // lokalitet
+  weather: // vejr
+  {
+    yr: null // fra yr
+  }
+}
+let RES_X = 1920; // opløsning appen er bygget ud fra
+let RES_Y = 960; // ^
+let scaling = 1; // appens skalering
+let windowXDiff = 0; // forskel mellem appens og vinduets opløsning
+let windowYDiff = 0; // ^
 
 function setup()
 {
-  updateLocation("Viborg, Denmark");
-  createCanvas(windowWidth, windowHeight);
-  main();
-}
-
-async function fetchCoords(loc)
-{
-  fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + loc + "&key=AIzaSyA6gpEIocAHIPsDmgv8Fuob3J7o_Cyu-7c")
-  .then(response => response.json())
-  .then(json => dataLocation = json);
-}
-
-function fetchYrWeather(coords)
-{
-  // Henter vejr data i json-format fra yr.no
-  fetch("https://api.met.no/weatherapi/locationforecast/2.0/compact?lat=" + coords[0] + "&lon=" + coords[1]) // Viborg
-  .then(response => response.json())
-  .then(json => data = json);
+  updateLocation(weatherLocation);
+  createCanvas(1,1);
+  windowResized();
 }
 
 function windowResized()
 {
   resizeCanvas(windowWidth, windowHeight);
-  if (windowWidth / windowHeight > 1600 / 900) scale(windowHeight / 900, windowHeight / 900);
-  else scale(windowWidth / 1600, windowWidth / 1600);
-  main();
+  // appen er designet ud fra en 1920 x 960 opløsning (2:1)
+  // har vinduet ikke præcist de størrelser, skal appen skaleres.
+  let xScale = windowWidth / RES_X;
+  let yScale = windowHeight / RES_Y;
+  print(windowWidth, RES_X);
+  scaling = 1;
+  if (xScale < yScale) scaling = xScale;
+  else scaling = yScale;
+  // hvor skal appens nulpunkt være for at den er centreret
+  windowXDiff = windowWidth - RES_X * scaling;
+  windowYDiff = windowHeight - RES_Y * scaling;
 }
 
 function updateLocation(newLocation)
 {
-  weatherLocation = newLocation.replace(/ /g, "+");
-  fetchCoords(weatherLocation);
+  newLocation = newLocation.replace(/ /g, "+");
+  fetchCoords(newLocation);
   setTimeout(function()
   {
-    weatherCoords[0] = round(dataLocation.results[0].geometry.location.lat, 3);
-    weatherCoords[1] = round(dataLocation.results[0].geometry.location.lng, 3);
+    weatherCoords[0] = round(data.location.results[0].geometry.location.lat, 3);
+    weatherCoords[1] = round(data.location.results[0].geometry.location.lng, 3);
     fetchYrWeather(weatherCoords);
   }, 1000); //
 
 
 }
 
-function main()
+/*function main()
 {
-  /*background(200);
 
   fill(255);
   noStroke();
@@ -59,19 +63,48 @@ function main()
   fill(100);
   textSize(24);
   text(data.properties.timeseries[0].data.instant.details.relative_humidity, 200, 200);
-  */
 
-  /*translate(100, 350);
+
+  translate(100, 350);
   for (let i = 0; i < 24; i++)
   {
     line(i * 50, -data.properties.timeseries[i].data.instant.details.air_temperature * 5, (i + 1) * 50, -data.properties.timeseries[i+1].data.instant.details.air_temperature * 5);
     print(data.properties.timeseries[i].data.instant.details.air_temperature);
   }
-  translate(-100, -350);*/
-}
+  translate(-100, -350);
+}*/
 
 
 function draw()
 {
+  background(200);
+  translate(windowXDiff / 2, windowYDiff / 2);
+  scale(scaling);
+  // temp
+  fill(127);
+  noStroke();
+  rect(0,0,RES_X,RES_Y);
+  textSize(50);
+  fill(0);
+  try
+  {
+    text(weatherLocation + ": " + data.weather.yr.properties.timeseries[0].data.instant.details.air_temperature + "°",100,50);
+  } catch (sdfsdfsdf) {}
+
+  yo = Object.keys(weatherIcons).map((key) => [Number(key), weatherIcons[key]])
+  let j = 0;
+  for (let i = 0; i < 19; i++)
+  {
+    image(yo[i][1], 0 + i * 100, 100);
+    image(yo[i+19][1], 0 + i * 100, 200);
+    image(yo[i+19+19][1], 0 + i * 100, 300);
+    image(yo[i+19+19+19][1], 0 + i * 100, 400);
+    try {
+      image(yo[i+19+19+19+19][1], 0 + i * 100, 500);
+    } catch (esdfsdf) {}
+  }
+
+  //
+
 
 }
