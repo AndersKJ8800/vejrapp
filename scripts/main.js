@@ -15,7 +15,7 @@ let windowYDiff = 0; // ^
 
 function setup()
 {
-  updateWeatherCoords(weatherLocation);
+  updateLocation(weatherLocation);
   createCanvas(1,1);
   windowResized();
 }
@@ -38,6 +38,9 @@ function windowResized()
 function updateLocation(newLocation)
 {
   weatherLocation = newLocation;
+  data.yr = null;
+  data.openWeather = null;
+  data.weatherBit = null;
   updateWeatherCoords();
   setTimeout(function()
   {
