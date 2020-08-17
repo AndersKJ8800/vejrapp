@@ -3,11 +3,9 @@ let weatherLocation = ("Viborg, Denmark"); // lokalitet som string
 let weatherCoords = []; // lokalitet som koordinater
 let data =  // hentet data i json format
 {
-  location: [], // lokalitet
-  weather: // vejr
-  {
-    yr: null // fra yr
-  }
+  yr: null, // fra yr
+  openWeather: null, // fra openweather
+  weatherBit: null
 }
 let RES_X = 1920; // opløsning appen er bygget ud fra
 let RES_Y = 960; // ^
@@ -17,7 +15,7 @@ let windowYDiff = 0; // ^
 
 function setup()
 {
-  updateLocation(weatherLocation);
+  updateWeatherCoords(weatherLocation);
   createCanvas(1,1);
   windowResized();
 }
@@ -29,7 +27,6 @@ function windowResized()
   // har vinduet ikke præcist de størrelser, skal appen skaleres.
   let xScale = windowWidth / RES_X;
   let yScale = windowHeight / RES_Y;
-  print(windowWidth, RES_X);
   scaling = 1;
   if (xScale < yScale) scaling = xScale;
   else scaling = yScale;
@@ -40,15 +37,14 @@ function windowResized()
 
 function updateLocation(newLocation)
 {
-  newLocation = newLocation.replace(/ /g, "+");
-  fetchCoords(newLocation);
+  weatherLocation = newLocation;
+  updateWeatherCoords();
   setTimeout(function()
   {
-    weatherCoords[0] = round(data.location.results[0].geometry.location.lat, 3);
-    weatherCoords[1] = round(data.location.results[0].geometry.location.lng, 3);
-    fetchYrWeather(weatherCoords);
+    fetchYrWeather();
+    fetchOpenWeather();
+    fetchWeatherBit();
   }, 1000); //
-
 
 }
 
@@ -88,7 +84,7 @@ function draw()
   fill(0);
   try
   {
-    text(weatherLocation + ": " + data.weather.yr.properties.timeseries[0].data.instant.details.air_temperature + "°",100,50);
+    text(weatherLocation + ": " + data.yr.properties.timeseries[0].data.instant.details.air_temperature + ", " + round((data.openWeather.list[0].main.temp -  273.15), 1) + ", " + data.weatherBit.data[0].temp + "°",100,50);
   } catch (sdfsdfsdf) {}
 
   yo = Object.keys(weatherIcons).map((key) => [Number(key), weatherIcons[key]])
