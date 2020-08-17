@@ -12,6 +12,11 @@ let RES_Y = 960; // ^
 let scaling = 1; // appens skalering
 let windowXDiff = 0; // forskel mellem appens og vinduets opløsning
 let windowYDiff = 0; // ^
+let buttons = [
+  new Button(200, 400, 80, 50, [255,0,0]),
+  new Button(300, 600, 80, 50, [0,255,0]),
+  new Button(300, 200, 80, 50, [0,0,255])
+]; // button objekter
 
 function setup()
 {
@@ -51,35 +56,11 @@ function updateLocation(newLocation)
 
 }
 
-/*function main()
-{
-
-  fill(255);
-  noStroke();
-  rect(150,150,350,600);
-  rect(600,150,850,680);
-
-  fill(100);
-  textSize(24);
-  text(data.properties.timeseries[0].data.instant.details.relative_humidity, 200, 200);
-
-
-  translate(100, 350);
-  for (let i = 0; i < 24; i++)
-  {
-    line(i * 50, -data.properties.timeseries[i].data.instant.details.air_temperature * 5, (i + 1) * 50, -data.properties.timeseries[i+1].data.instant.details.air_temperature * 5);
-    print(data.properties.timeseries[i].data.instant.details.air_temperature);
-  }
-  translate(-100, -350);
-}*/
-
-
 function draw()
 {
   background(200);
   translate(windowXDiff / 2, windowYDiff / 2);
   scale(scaling);
-  // temp
   fill(127);
   noStroke();
   rect(0,0,RES_X,RES_Y);
@@ -88,7 +69,7 @@ function draw()
   try
   {
     text(weatherLocation + ": " + data.yr.properties.timeseries[0].data.instant.details.air_temperature + ", " + round((data.openWeather.list[0].main.temp -  273.15), 1) + ", " + data.weatherBit.data[0].temp + "°",100,50);
-  } catch (sdfsdfsdf) {}
+  } catch (exceptionIgnored) {}
 
   yo = Object.keys(weatherIcons).map((key) => [Number(key), weatherIcons[key]])
   let j = 0;
@@ -102,8 +83,25 @@ function draw()
       image(yo[i+19+19+19+19][1], 0 + i * 100, 500);
     } catch (esdfsdf) {}
   }
+  for (let i = 0; i < buttons.length; i++)
+  {
+    buttons[i].draw();
+  }
 
-  //
+}
 
-
+function mousePressed()
+{
+  let y = round((mouseY - (windowYDiff / 2)) / scaling);
+  let x = round((mouseX - (windowXDiff / 2)) / scaling);
+  for (let i = 0; i < buttons.length; i++)
+  {
+    if (x >= buttons[i].x && x <= buttons[i].x + buttons[i].width)
+    {
+      if (y >= buttons[i].y && y <= buttons[i].y + buttons[i].height)
+      {
+        buttons[i].update();
+      }
+    }
+  }
 }
