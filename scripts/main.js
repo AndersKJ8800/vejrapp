@@ -1,13 +1,29 @@
 let yo;
 let weatherLocation = ("Viborg, Denmark"); // lokalitet som string
 let weatherCoords = []; // lokalitet som koordinater
-let data =  // hentet data i json format
+let importJson =  // hentet data i json format
 {
   yr: null, // fra yr
   openWeather: null, // fra openweather
   weatherBit: null
 }
-let RES_X = 1920; // opløsning appen er bygget ud fra
+let data = // fortolket data fra json, hvert variabel er et array med forskellige kilder; [0]: yr, [1]: openweather, [2]: weatherbit, [3]: beregnet gennemsnit.
+{
+  location: weatherLocation, // lokalitet for vejret
+  now: // vejret som det er lige nu.
+  {
+    temperature: [],
+    pressure: [],
+    cloudCover: [],
+    precipitation: [],
+    humidity: [],
+    windSpeed: [],
+    windDirection: []
+  },
+  next48Hours: [], // vejret de næste 48 timer med mellemrum på 1 time.
+  next5Days: []// vejret de næste 5 døgn (48-120 timer) med mellemrum på 6 timer.
+}
+let RES_X = 1920; // opløsning / forhold appen er bygget ud fra
 let RES_Y = 960; // ^
 let scaling = 1; // appens skalering
 let windowXDiff = 0; // forskel mellem appens og vinduets opløsning
@@ -20,6 +36,32 @@ let buttons = [
 
 function setup()
 {
+  for (let i = 0; i < 48; i++)
+  {
+    data.next48Hours[i] =
+    {
+      temperature: [0, 0, 0, 0],
+      pressure: [0, 0, 0, 0],
+      cloudCover: [0, 0, 0, 0],
+      precipitation: [0, 0, 0, 0],
+      humidity: [0, 0, 0, 0],
+      windSpeed: [0, 0, 0, 0],
+      windDirection: [0, 0, 0, 0]
+    };
+  }
+  for (let i = 0; i < 21; i++)
+  {
+    data.next5Days[i] =
+    {
+      temperature: [0, 0, 0, 0],
+      pressure: [0, 0, 0, 0],
+      cloudCover: [0, 0, 0, 0],
+      precipitation: [0, 0, 0, 0],
+      humidity: [0, 0, 0, 0],
+      windSpeed: [0, 0, 0, 0],
+      windDirection: [0, 0, 0, 0]
+    }
+  }
   updateLocation(weatherLocation);
   createCanvas(1,1);
   windowResized();
@@ -30,6 +72,7 @@ function windowResized()
   resizeCanvas(windowWidth, windowHeight);
   // appen er designet ud fra en 1920 x 960 opløsning (2:1)
   // har vinduet ikke præcist de størrelser, skal appen skaleres.
+  // appen skaleres så meget som muligt mens den forbeholder et 2:1 størrelsesforhold.
   let xScale = windowWidth / RES_X;
   let yScale = windowHeight / RES_Y;
   scaling = 1;
@@ -43,9 +86,9 @@ function windowResized()
 function updateLocation(newLocation)
 {
   weatherLocation = newLocation;
-  data.yr = null;
-  data.openWeather = null;
-  data.weatherBit = null;
+  importJson.yr = null;
+  importJson.openWeather = null;
+  importJson.weatherBit = null;
   updateWeatherCoords();
   setTimeout(function()
   {
@@ -66,26 +109,28 @@ function draw()
   rect(0,0,RES_X,RES_Y);
   textSize(50);
   fill(0);
+
+  strokeWeight(10);
+  for(let i = 0; i < data.next48Hours.length - 2; i++)
+  {
+    stroke(255,0,0);
+    line(50 + 38 * i, -data.next48Hours[i].temperature[0] * 25 + 1000, 50 + 38 * (i + 1), -data.next48Hours[i+1].temperature[0] * 25 + 1000);
+    stroke(255,255,255);
+    line(50 + 38 * i, -data.next48Hours[i].windSpeed[0] * 50 + 900, 50 + 38 * (i + 1), -data.next48Hours[i+1].windSpeed[0] * 50 + 900);
+    stroke(0,0,255);
+    line(50 + 38 * i, -data.next48Hours[i].humidity[0] * 15 + 1700, 50 + 38 * (i + 1), -data.next48Hours[i+1].humidity[0] * 15 + 1700);
+    stroke(80,80,80);
+    line(50 + 38 * i, -data.next48Hours[i].cloudCover[0] * 8 + 1000, 50 + 38 * (i + 1), -data.next48Hours[i+1].cloudCover[0] * 8 + 1000);
+  }
+
   try
   {
-    text(weatherLocation + ": " + data.yr.properties.timeseries[0].data.instant.details.air_temperature + ", " + round((data.openWeather.list[0].main.temp -  273.15), 1) + ", " + data.weatherBit.data[0].temp + "°",100,50);
+    text(weatherLocation + ": " + importJson.yr.properties.timeseries[0].importJson.instant.details.air_temperature + ", " + round((importJson.openWeather.list[0].main.temp -  273.15), 1) + ", " + importJson.weatherBit.data[0].temp + "°",100,50);
   } catch (exceptionIgnored) {}
 
-  yo = Object.keys(weatherIcons).map((key) => [Number(key), weatherIcons[key]])
-  let j = 0;
-  for (let i = 0; i < 19; i++)
-  {
-    image(yo[i][1], 0 + i * 100, 100);
-    image(yo[i+19][1], 0 + i * 100, 200);
-    image(yo[i+19+19][1], 0 + i * 100, 300);
-    image(yo[i+19+19+19][1], 0 + i * 100, 400);
-    try {
-      image(yo[i+19+19+19+19][1], 0 + i * 100, 500);
-    } catch (esdfsdf) {}
-  }
   for (let i = 0; i < buttons.length; i++)
   {
-    buttons[i].draw();
+    //buttons[i].draw();
   }
 
 }
