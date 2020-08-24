@@ -4,7 +4,8 @@ let weatherCoords = []; // lokalitet som koordinater
 let importJson =  // hentet data i json format
 {
   yr: null, // fra yr
-  openWeather: null, // fra openweather
+  openWeather1Hour: null, // fra openweather (1/48 timer)
+  openWeather3Hours: null, // fra openwather (3/120 timer)
   weatherBit: null
 }
 let data = // fortolket data fra json, hvert variabel er et array med forskellige kilder; [0]: yr, [1]: openweather, [2]: weatherbit, [3]: beregnet gennemsnit.
@@ -36,7 +37,7 @@ let buttons = [
 
 function setup()
 {
-  for (let i = 0; i < 48; i++)
+  for (let i = 0; i < 49; i++)
   {
     data.next48Hours[i] =
     {
@@ -53,8 +54,8 @@ function setup()
   {
     data.next5Days[i] =
     {
+      time: [0, 0, 0, 0],
       temperature: [0, 0, 0, 0],
-      pressure: [0, 0, 0, 0],
       cloudCover: [0, 0, 0, 0],
       precipitation: [0, 0, 0, 0],
       humidity: [0, 0, 0, 0],
@@ -111,16 +112,16 @@ function draw()
   fill(0);
 
   strokeWeight(10);
-  for(let i = 0; i < data.next48Hours.length - 2; i++)
+  for(let i = 0; i < data.next5Days.length-2; i++)
   {
     stroke(255,0,0);
-    line(50 + 38 * i, -data.next48Hours[i].temperature[0] * 25 + 1000, 50 + 38 * (i + 1), -data.next48Hours[i+1].temperature[0] * 25 + 1000);
+    line(50 + 90 * i, -data.next5Days[i].temperature[0] * 25 + 1000, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[0] * 25 + 1000);
     stroke(255,255,255);
-    line(50 + 38 * i, -data.next48Hours[i].windSpeed[0] * 50 + 900, 50 + 38 * (i + 1), -data.next48Hours[i+1].windSpeed[0] * 50 + 900);
+    line(50 + 90 * i, -data.next5Days[i].windSpeed[0] * 50 + 900, 50 + 90 * (i + 1), -data.next5Days[i+1].windSpeed[0] * 50 + 900);
     stroke(0,0,255);
-    line(50 + 38 * i, -data.next48Hours[i].humidity[0] * 15 + 1700, 50 + 38 * (i + 1), -data.next48Hours[i+1].humidity[0] * 15 + 1700);
+    line(50 + 90 * i, -data.next5Days[i].humidity[0] * 15 + 1700, 50 + 90 * (i + 1), -data.next5Days[i+1].humidity[0] * 15 + 1700);
     stroke(80,80,80);
-    line(50 + 38 * i, -data.next48Hours[i].cloudCover[0] * 8 + 1000, 50 + 38 * (i + 1), -data.next48Hours[i+1].cloudCover[0] * 8 + 1000);
+    line(50 + 90 * i, -data.next5Days[i].cloudCover[0] * 8 + 1000, 50 + 90 * (i + 1), -data.next5Days[i+1].cloudCover[0] * 8 + 1000);
   }
 
   try

@@ -23,7 +23,13 @@ function fetchOpenWeather()
 {
   fetch("https://api.openweathermap.org/data/2.5/forecast?lat=" + weatherCoords[0] + "&lon=" + weatherCoords[1] + "&appid=a75b2f1551a5efc97ef0ac5b55d5bd83")
   .then(response => response.json())
-  .then(json => importJson.openWeather = json);
+  .then(json => importJson.openWeather3Hours = json)
+  .then(json => parseOpenWeather3Hours());
+
+  fetch("https://api.openweathermap.org/data/2.5/onecall?lat=" + weatherCoords[0] + "&lon=" + weatherCoords[1] + "&exclude=daily,minutely&appid=a75b2f1551a5efc97ef0ac5b55d5bd83")
+  .then(response => response.json())
+  .then(json => importJson.openWeather1Hour = json)
+  .then(json => parseOpenWeather1Hour());
 }
 
 function fetchWeatherBit()
