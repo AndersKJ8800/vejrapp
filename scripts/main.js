@@ -13,16 +13,16 @@ let data = // fortolket data fra json, hvert variabel er et array med forskellig
   location: weatherLocation, // lokalitet for vejret
   now: // vejret som det er lige nu.
   {
-    temperature: [],
-    pressure: [],
-    cloudCover: [],
-    precipitation: [],
-    humidity: [],
-    windSpeed: [],
-    windDirection: []
+    temperature: [0, 0, 0, 0],
+    pressure: [0, 0, 0, 0],
+    cloudCover: [0, 0, 0, 0],
+    precipitation: [0, 0, 0, 0],
+    humidity: [0, 0, 0, 0],
+    windSpeed: [0, 0, 0, 0],
+    windDirection: [0, 0, 0, 0]
   },
   next48Hours: [], // vejret de næste 48 timer med mellemrum på 1 time.
-  next5Days: []// vejret de næste 5 døgn (48-120 timer) med mellemrum på 6 timer.
+  next5Days: []// vejret de næste 5 døgn (4 8-120 timer) med mellemrum på 6 timer.
 }
 let RES_X = 1920; // opløsning / forhold appen er bygget ud fra
 let RES_Y = 960; // ^
@@ -37,7 +37,7 @@ let buttons = [
 
 function setup()
 {
-  for (let i = 0; i < 49; i++)
+  for (let i = 0; i < 48; i++)
   {
     data.next48Hours[i] =
     {
@@ -54,7 +54,6 @@ function setup()
   {
     data.next5Days[i] =
     {
-      time: [0, 0, 0, 0],
       temperature: [0, 0, 0, 0],
       cloudCover: [0, 0, 0, 0],
       precipitation: [0, 0, 0, 0],
@@ -114,14 +113,10 @@ function draw()
   strokeWeight(10);
   for(let i = 0; i < data.next5Days.length-2; i++)
   {
-    stroke(255,0,0);
+    stroke(255,100,100);
     line(50 + 90 * i, -data.next5Days[i].temperature[0] * 25 + 1000, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[0] * 25 + 1000);
-    stroke(255,255,255);
-    line(50 + 90 * i, -data.next5Days[i].windSpeed[0] * 50 + 900, 50 + 90 * (i + 1), -data.next5Days[i+1].windSpeed[0] * 50 + 900);
     stroke(0,0,255);
-    line(50 + 90 * i, -data.next5Days[i].humidity[0] * 15 + 1700, 50 + 90 * (i + 1), -data.next5Days[i+1].humidity[0] * 15 + 1700);
-    stroke(80,80,80);
-    line(50 + 90 * i, -data.next5Days[i].cloudCover[0] * 8 + 1000, 50 + 90 * (i + 1), -data.next5Days[i+1].cloudCover[0] * 8 + 1000);
+    line(50 + 90 * i, -data.next5Days[i].temperature[1] * 25 + 1000, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[1] * 25 + 1000);
   }
 
   try

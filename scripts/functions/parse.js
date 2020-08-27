@@ -28,27 +28,27 @@ function parseYrWeather()
   data.now.windSpeed[0] = currentTimeseries.data.instant.details.wind_speed;
   data.now.windDirection[0] = currentTimeseries.data.instant.details.wind_from_direction;
   // anviser data til næste 48 timer
-  for (let i = 0; i < 49; i++)
+  for (let i = 0; i < 48; i++)
   {
-    data.next48Hours[i].temperature[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_temperature,
-    data.next48Hours[i].pressure[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_pressure_at_sea_level,
-    data.next48Hours[i].cloudCover[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.cloud_area_fraction,
-    data.next48Hours[i].humidity[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.relative_humidity,
-    data.next48Hours[i].precipitation[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.next_1_hours.details.precipitation_amount,
-    data.next48Hours[i].windSpeed[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.wind_speed,
-    data.next48Hours[i].windDirection[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.wind_from_direction
+    data.next48Hours[i].temperature[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_temperature;
+    data.next48Hours[i].pressure[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_pressure_at_sea_level;
+    data.next48Hours[i].cloudCover[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.cloud_area_fraction;
+    data.next48Hours[i].humidity[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.relative_humidity;
+    data.next48Hours[i].precipitation[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.next_1_hours.details.precipitation_amount;
+    data.next48Hours[i].windSpeed[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.wind_speed;
+    data.next48Hours[i].windDirection[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.wind_from_direction;
   }
   // anvise data til næste 5 dage
   {
     let loopHour = round((hour()+3)/6)*6;
     let loopDay = currentDay;
-    for (let i = 0; i < 20; i++)
+    let currentMonth = month();
+    for (let i = 0; i < 21; i++)
     {
       for (let j = 0; j < importJson.yr.properties.timeseries.length; j++)
       {
         if (importJson.yr.properties.timeseries[j].time.includes(loopDay + "T" + loopHour) || importJson.yr.properties.timeseries[j].time.includes(loopDay + "T0" + loopHour))
         {
-          data.next5Days[i].time[0] = importJson.yr.properties.timeseries[j].time;
           data.next5Days[i].temperature[0] = importJson.yr.properties.timeseries[j].data.instant.details.air_temperature;
           data.next5Days[i].cloudCover[0] = importJson.yr.properties.timeseries[j].data.instant.details.cloud_area_fraction;
           data.next5Days[i].humidity[0] = importJson.yr.properties.timeseries[j].data.instant.details.relative_humidity;
@@ -62,7 +62,14 @@ function parseYrWeather()
       if (loopHour > 18)
       {
         loopHour = 0;
-        loopDay++;
+        if (loopDay == 31 || (loopDay == 30 && (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 || currentMonth == 11)) || (loopDay == 28 && currentMonth == 2))
+        {
+          loopDay = 1;
+        }
+        else
+        {
+          loopDay++;
+        }
       }
     }
   }
@@ -73,27 +80,87 @@ function parseYrWeather()
 function parseOpenWeather1Hour()
 {
   // anviser data til vejret nu
-  data.now.temperature[1] = round((importJson.openWeather1Hour.current.temp - 273.15) * 10) / 10; // temperatur omdannes til celcius og afrundes til et decimal
-  data.now.pressure[1] = importJson.openWeather1Hour.current.pressure;
-  data.now.cloudCover[1] = importJson.openWeather1Hour.current.clouds;
-  data.now.humidity[1] = importJson.openWeather1Hour.current.humidity;
-
-  if (typeof importJson.openWeather1Hour.current.rain !== "undefined")
   {
-    data.now.precipitation[1] = importJson.openWeather1Hour.current.rain["1h"];
-  }
-  else
-  {
-    data.now.precipitation[1] = 0;
-  }
-  data.now.windSpeed[1] = importJson.openWeather1Hour.current.wind_speed;
-  data.now.windDirection[1] = importJson.openWeather1Hour.current.wind_deg;
+    data.now.temperature[1] = round((importJson.openWeather1Hour.current.temp - 273.15) * 10) / 10; // temperatur omdannes til celcius og afrundes til et decimal
+    data.now.pressure[1] = importJson.openWeather1Hour.current.pressure;
+    data.now.cloudCover[1] = importJson.openWeather1Hour.current.clouds;
+    data.now.humidity[1] = importJson.openWeather1Hour.current.humidity;
 
+    if (typeof importJson.openWeather1Hour.current.rain !== "undefined")
+    {
+      data.now.precipitation[1] = importJson.openWeather1Hour.current.rain["1h"];
+    }
+    else
+    {
+      data.now.precipitation[1] = 0;
+    }
+    data.now.windSpeed[1] = importJson.openWeather1Hour.current.wind_speed;
+    data.now.windDirection[1] = importJson.openWeather1Hour.current.wind_deg;
+  }
+  // anviser data til vejret 48 timer frem
+  {
+    for (let i = 0; i < 48; i++)
+    {
+      data.next48Hours[i].temperature[1] =  round((importJson.openWeather1Hour.hourly[i].temp - 273.15) * 10) / 10
+      data.next48Hours[i].pressure[1] = importJson.openWeather1Hour.hourly[i].pressure;
+      data.next48Hours[i].cloudCover[1] = importJson.openWeather1Hour.hourly[i].clouds;
+      data.next48Hours[i].humidity[1] = importJson.openWeather1Hour.hourly[i].humidity;
+      try
+      {
+        data.next48Hours[i].precipitation[1] = importJson.openWeather1Hour.hourly[i].rain["1h"];
+      }
+      catch
+      {
+        data.next48Hours[i].precipitation[1] = 0;
+      }
+      data.next48Hours[i].windSpeed[1] = importJson.openWeather1Hour.hourly[i].wind_speed;
+      data.next48Hours[i].windDirection[1] = importJson.openWeather1Hour.hourly[i].wind_deg;
+    }
+  }
 }
 
 // behandler det data fra openWeather med tre timers intervaller
 // bliver brugt til vejret 5 døgn frem
 function parseOpenWeather3Hours()
+// anvise data til næste 5 dage
 {
-
+  let loopHour = round((hour()+3)/6)*6;
+  let loopDay = day();
+  let currentMonth = month();
+  for (let i = 0; i < 21; i++)
+  {
+    for (let j = 0; j < importJson.openWeather3Hours.list.length; j++)
+    {
+      if (importJson.openWeather3Hours.list[j].dt_txt.includes(loopDay + " " + loopHour) || importJson.openWeather3Hours.list[j].dt_txt.includes(loopDay + " 0" + loopHour))
+      {
+        data.next5Days[i].temperature[1] = round((importJson.openWeather3Hours.list[j].main.temp - 273.15) * 10) / 10;
+        data.next5Days[i].cloudCover[1] = importJson.openWeather3Hours.list[j].clouds.all;
+        data.next5Days[i].humidity[1] = importJson.openWeather3Hours.list[j].main.humidity;
+        try
+        {
+          data.next5Days[i].precipitation[1] = importJson.openWeather3Hours.list[i].rain["3h"];
+        }
+        catch
+        {
+          data.next5Days[i].precipitation[1] = 0;
+        }
+        data.next5Days[i].windSpeed[1] = importJson.openWeather3Hours.list[i].wind.speed;
+        data.next5Days[i].windDirection[1] = importJson.openWeather3Hours.list[i].wind.deg;
+        break;
+      }
+    }
+    loopHour += 6;
+    if (loopHour > 18)
+    {
+      loopHour = 0;
+      if (loopDay == 31 || (loopDay == 30 && (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 || currentMonth == 11)) || (loopDay == 28 && currentMonth == 2))
+      {
+        loopDay = 1;
+      }
+      else
+      {
+        loopDay++;
+      }
+    }
+  }
 }
