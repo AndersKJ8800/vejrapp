@@ -32,16 +32,10 @@ function fetchOpenWeather()
   .then(json => parseOpenWeather1Hour());
 }
 
-function fetchWeatherBit()
+function fetchAerisWeather()
 {
-  fetch("https://weatherbit-v1-mashape.p.rapidapi.com/forecast/hourly?lang=en&hours=48&lat=" + weatherCoords[0] + "&lon=" + weatherCoords[1], {
-	   "method": "GET",
-	    "headers":
-      {
-		      "x-rapidapi-host": "weatherbit-v1-mashape.p.rapidapi.com",
-		        "x-rapidapi-key": "221d67e149mshfe5c26dc12d4138p1857e9jsnb0c2c1aac3de"
-	    }
-  })
+  fetch("https://api.aerisapi.com/forecasts/" + weatherCoords[0] + "," + weatherCoords[1] + "?filter=1hr&limit=130&fields=periods.dateTimeISO,periods.maxTempF,periods.maxTempC,periods.pop,periods.precipIN,periods.precipMM,periods.humidity,periods.sky,periods.solradWM2,periods.dewpointF,periods.dewpointC,periods.windDir,periods.windSpeedMaxMPH,periods.windSpeedMaxKPH,periods.weather&client_id=icumD3dUbzEppxotPXTS9&client_secret=49FYaCwyl2LfRp4VME4BXDG0Y8aQNkO8JMvsqvag")
   .then(response => response.json())
-  .then(json => importJson.weatherBit = json);
+  .then(json => importJson.aerisWeather = json)
+  .then(json => parseAerisWeather());
 }

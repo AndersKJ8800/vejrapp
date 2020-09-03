@@ -20,6 +20,7 @@ function parseYrWeather()
     }
   }
   // anviser data til vejret nu
+  data.now.time[0] = currentTimeseries.time;
   data.now.temperature[0] = currentTimeseries.data.instant.details.air_temperature;
   data.now.pressure[0] = currentTimeseries.data.instant.details.air_pressure_at_sea_level;
   data.now.cloudCover[0] = currentTimeseries.data.instant.details.cloud_area_fraction;
@@ -30,6 +31,7 @@ function parseYrWeather()
   // anviser data til næste 48 timer
   for (let i = 0; i < 48; i++)
   {
+    data.next48Hours[i].time[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].time;
     data.next48Hours[i].temperature[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_temperature;
     data.next48Hours[i].pressure[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_pressure_at_sea_level;
     data.next48Hours[i].cloudCover[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.cloud_area_fraction;
@@ -49,6 +51,7 @@ function parseYrWeather()
       {
         if (importJson.yr.properties.timeseries[j].time.includes(loopDay + "T" + loopHour) || importJson.yr.properties.timeseries[j].time.includes(loopDay + "T0" + loopHour))
         {
+          data.next5Days[i].time[0] = importJson.yr.properties.timeseries[j].time;
           data.next5Days[i].temperature[0] = importJson.yr.properties.timeseries[j].data.instant.details.air_temperature;
           data.next5Days[i].cloudCover[0] = importJson.yr.properties.timeseries[j].data.instant.details.cloud_area_fraction;
           data.next5Days[i].humidity[0] = importJson.yr.properties.timeseries[j].data.instant.details.relative_humidity;
@@ -81,6 +84,7 @@ function parseOpenWeather1Hour()
 {
   // anviser data til vejret nu
   {
+    data.now.temperature[1] = importJson.openWeather1Hour.current.dt;
     data.now.temperature[1] = round((importJson.openWeather1Hour.current.temp - 273.15) * 10) / 10; // temperatur omdannes til celcius og afrundes til et decimal
     data.now.pressure[1] = importJson.openWeather1Hour.current.pressure;
     data.now.cloudCover[1] = importJson.openWeather1Hour.current.clouds;
@@ -101,7 +105,8 @@ function parseOpenWeather1Hour()
   {
     for (let i = 0; i < 48; i++)
     {
-      data.next48Hours[i].temperature[1] =  round((importJson.openWeather1Hour.hourly[i].temp - 273.15) * 10) / 10
+      data.next48Hours[i].time[1] = importJson.openWeather1Hour.hourly[i].dt;
+      data.next48Hours[i].temperature[1] = round((importJson.openWeather1Hour.hourly[i].temp - 273.15) * 10) / 10
       data.next48Hours[i].pressure[1] = importJson.openWeather1Hour.hourly[i].pressure;
       data.next48Hours[i].cloudCover[1] = importJson.openWeather1Hour.hourly[i].clouds;
       data.next48Hours[i].humidity[1] = importJson.openWeather1Hour.hourly[i].humidity;
@@ -133,6 +138,7 @@ function parseOpenWeather3Hours()
     {
       if (importJson.openWeather3Hours.list[j].dt_txt.includes(loopDay + " " + loopHour) || importJson.openWeather3Hours.list[j].dt_txt.includes(loopDay + " 0" + loopHour))
       {
+        data.next5Days[i].time[1] = importJson.openWeather3Hours.list[j].dt;
         data.next5Days[i].temperature[1] = round((importJson.openWeather3Hours.list[j].main.temp - 273.15) * 10) / 10;
         data.next5Days[i].cloudCover[1] = importJson.openWeather3Hours.list[j].clouds.all;
         data.next5Days[i].humidity[1] = importJson.openWeather3Hours.list[j].main.humidity;
@@ -163,4 +169,63 @@ function parseOpenWeather3Hours()
       }
     }
   }
+}
+
+function parseAerisWeather()
+{
+  // nu
+  data.now.time[2] = importJson.aerisWeather.response[0].periods[0].dateTimeISO;
+  data.now.temperature[2] = importJson.aerisWeather.response[0].periods[0].maxTempC;
+  data.now.cloudCover[2] = importJson.aerisWeather.response[0].periods[0].sky;
+  data.now.humidity[2] = importJson.aerisWeather.response[0].periods[0].humidity;
+  data.now.precipitation[2] = importJson.aerisWeather.response[0].periods[0].precipMM;
+  data.now.windSpeed[2] = importJson.aerisWeather.response[0].periods[0].windSpeedMaxKPH;
+  data.now.windDirection[2] = importJson.aerisWeather.response[0].periods[0].windDir;
+  data.now.pressure[2] = null;
+  // næste to døgn
+  for (let i = 0; i < 48; i++)
+  {
+    data.next48Hours[i].time[2] = importJson.aerisWeather.response[0].periods[i].dateTimeISO;
+    data.next48Hours[i].temperature[2] = importJson.aerisWeather.response[0].periods[i].maxTempC;
+    data.next48Hours[i].cloudCover[2] = importJson.aerisWeather.response[0].periods[i].sky;
+    data.next48Hours[i].humidity[2] = importJson.aerisWeather.response[0].periods[i].humidity;
+    data.next48Hours[i].precipitation[2] = importJson.aerisWeather.response[0].periods[i].precipMM;
+    data.next48Hours[i].windSpeed[2] = importJson.aerisWeather.response[0].periods[i].windSpeedMaxKPH;
+    data.next48Hours[i].windDirection[2] = importJson.aerisWeather.response[0].periods[i].windDir;
+    data.next48Hours[i].pressure[2] = null;
+  }
+  // næste 5 døgn
+  {
+    let currentHour = hour();
+    let currentDay = day();
+    let loopDay = currentDay;
+    let loopHour = currentHour;
+    for (let i = 0; i < 20; i++)
+    {
+      for (let j = 0; j < importJson.aerisWeather.response[0].periods.length; j++)
+      {
+        if (importJson.aerisWeather.response[0].periods[j].dateTimeISO.includes(loopDay + "T" + loopHour)
+        || importJson.aerisWeather.response[0].periods[j].dateTimeISO.includes(loopDay + "T0" + loopHour))
+        {
+          data.next5Days[i].time[2] = importJson.aerisWeather.response[0].periods[j].dateTimeISO;
+          data.next5Days[i].temperature[2] = importJson.aerisWeather.response[0].periods[j].maxTempC;
+          data.next5Days[i].cloudCover[2] = importJson.aerisWeather.response[0].periods[j].sky;
+          data.next5Days[i].humidity[2] = importJson.aerisWeather.response[0].periods[j].humidity;
+          data.next5Days[i].precipitation[2] = importJson.aerisWeather.response[0].periods[j].precipMM; // to-do; tager kun nedbør den kommende time i stedet for 6 timer
+          data.next5Days[i].windSpeed[2] = importJson.aerisWeather.response[0].periods[j].windSpeedMaxKPH;
+          data.next5Days[i].windDirection[2] = importJson.aerisWeather.response[0].periods[j].windDir;
+          data.next5Days[i].pressure[2] = null;
+        }
+      }
+    }
+  }
+
+
+
+
+
+
+
+
+
 }

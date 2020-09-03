@@ -6,13 +6,14 @@ let importJson =  // hentet data i json format
   yr: null, // fra yr
   openWeather1Hour: null, // fra openweather (1/48 timer)
   openWeather3Hours: null, // fra openwather (3/120 timer)
-  weatherBit: null
+  aerisWeather: null, // fra aerisweather (1/120 timer)
 }
 let data = // fortolket data fra json, hvert variabel er et array med forskellige kilder; [0]: yr, [1]: openweather, [2]: weatherbit, [3]: beregnet gennemsnit.
 {
   location: weatherLocation, // lokalitet for vejret
   now: // vejret som det er lige nu.
   {
+    time: [0, 0, 0, 0],
     temperature: [0, 0, 0, 0],
     pressure: [0, 0, 0, 0],
     cloudCover: [0, 0, 0, 0],
@@ -41,6 +42,7 @@ function setup()
   {
     data.next48Hours[i] =
     {
+      time: [0, 0, 0, 0],
       temperature: [0, 0, 0, 0],
       pressure: [0, 0, 0, 0],
       cloudCover: [0, 0, 0, 0],
@@ -54,6 +56,7 @@ function setup()
   {
     data.next5Days[i] =
     {
+      time: [0, 0, 0, 0],
       temperature: [0, 0, 0, 0],
       cloudCover: [0, 0, 0, 0],
       precipitation: [0, 0, 0, 0],
@@ -87,14 +90,15 @@ function updateLocation(newLocation)
 {
   weatherLocation = newLocation;
   importJson.yr = null;
-  importJson.openWeather = null;
-  importJson.weatherBit = null;
+  importJson.openWeather1Hour = null;
+  importJson.openWeather3Hours = null;
+  importJson.aerisWeather = null;
   updateWeatherCoords();
   setTimeout(function()
   {
     fetchYrWeather();
     fetchOpenWeather();
-    fetchWeatherBit();
+    fetchAerisWeather();
   }, 1000); //
 
 }
@@ -118,11 +122,6 @@ function draw()
     stroke(0,0,255);
     line(50 + 90 * i, -data.next5Days[i].temperature[1] * 25 + 1000, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[1] * 25 + 1000);
   }
-
-  try
-  {
-    text(weatherLocation + ": " + importJson.yr.properties.timeseries[0].importJson.instant.details.air_temperature + ", " + round((importJson.openWeather.list[0].main.temp -  273.15), 1) + ", " + importJson.weatherBit.data[0].temp + "°",100,50);
-  } catch (exceptionIgnored) {}
 
   for (let i = 0; i < buttons.length; i++)
   {
