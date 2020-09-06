@@ -25,6 +25,7 @@ let data = // fortolket data fra json, hvert variabel er et array med forskellig
   next48Hours: [], // vejret de næste 48 timer med mellemrum på 1 time.
   next5Days: []// vejret de næste 5 døgn (4 8-120 timer) med mellemrum på 6 timer.
 }
+let parsedData = 0; // antallet af json filer der er blevet behandlet
 let RES_X = 1920; // opløsning / forhold appen er bygget ud fra
 let RES_Y = 960; // ^
 let scaling = 1; // appens skalering
@@ -93,6 +94,7 @@ function updateLocation(newLocation)
   importJson.openWeather1Hour = null;
   importJson.openWeather3Hours = null;
   importJson.aerisWeather = null;
+  parsedData = 0;
   updateWeatherCoords();
   setTimeout(function()
   {
@@ -100,6 +102,11 @@ function updateLocation(newLocation)
     fetchOpenWeather();
     fetchAerisWeather();
   }, 1000); //
+}
+
+function calculateAverages()
+{
+  if (parsedData != 4) break;
 
 }
 
@@ -117,10 +124,15 @@ function draw()
   strokeWeight(10);
   for(let i = 0; i < data.next5Days.length-2; i++)
   {
-    stroke(255,100,100);
-    line(50 + 90 * i, -data.next5Days[i].temperature[0] * 25 + 1000, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[0] * 25 + 1000);
+    stroke(255,0,0);
+    line(50 + 90 * i, -data.next5Days[i].temperature[0] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[0] * 50 + 1300);
+    //line(50 + 90 * i, -data.next48Hours[i].temperature[0] * 80 + 1600, 50 + 90 * (i + 1), -data.next48Hours[i+1].temperature[0] * 80 + 1600);
     stroke(0,0,255);
-    line(50 + 90 * i, -data.next5Days[i].temperature[1] * 25 + 1000, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[1] * 25 + 1000);
+    line(50 + 90 * i, -data.next5Days[i].temperature[1] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[1] * 50 + 1300);
+    //line(50 + 90 * i, -data.next48Hours[i].temperature[1] * 80 + 1600, 50 + 90 * (i + 1), -data.next48Hours[i+1].temperature[1] * 80 + 1600);
+    stroke(0,255,0);
+    line(50 + 90 * i, -data.next5Days[i].temperature[2] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[2] * 50 + 1300);
+    //line(50 + 90 * i, -data.next48Hours[i].temperature[2] * 80 + 1600, 50 + 90 * (i + 1), -data.next48Hours[i+1].temperature[2] * 80 + 1600);
   }
 
   for (let i = 0; i < buttons.length; i++)

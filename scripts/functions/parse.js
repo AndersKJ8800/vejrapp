@@ -76,6 +76,7 @@ function parseYrWeather()
       }
     }
   }
+  parsedData++;
 }
 
 // behandler det data fra openWeather med en times intervaller
@@ -122,6 +123,7 @@ function parseOpenWeather1Hour()
       data.next48Hours[i].windDirection[1] = importJson.openWeather1Hour.hourly[i].wind_deg;
     }
   }
+  parsedData++;
 }
 
 // behandler det data fra openWeather med tre timers intervaller
@@ -169,6 +171,7 @@ function parseOpenWeather3Hours()
       }
     }
   }
+  parsedData++;
 }
 
 function parseAerisWeather()
@@ -198,8 +201,9 @@ function parseAerisWeather()
   {
     let currentHour = hour();
     let currentDay = day();
+    let currentMonth = month();
     let loopDay = currentDay;
-    let loopHour = currentHour;
+    let loopHour = round((hour()+3)/6)*6;
     for (let i = 0; i < 20; i++)
     {
       for (let j = 0; j < importJson.aerisWeather.response[0].periods.length; j++)
@@ -214,18 +218,24 @@ function parseAerisWeather()
           data.next5Days[i].precipitation[2] = importJson.aerisWeather.response[0].periods[j].precipMM; // to-do; tager kun nedbør den kommende time i stedet for 6 timer
           data.next5Days[i].windSpeed[2] = importJson.aerisWeather.response[0].periods[j].windSpeedMaxKPH;
           data.next5Days[i].windDirection[2] = importJson.aerisWeather.response[0].periods[j].windDir;
-          data.next5Days[i].pressure[2] = null;
+          //data.next5Days[i].pressure[2] = null;
+          break
+        }
+      }
+      loopHour += 6;
+      if (loopHour > 18)
+      {
+        loopHour = 0;
+        if (loopDay == 31 || (loopDay == 30 && (currentMonth == 4 || currentMonth == 6 || currentMonth == 9 || currentMonth == 11)) || (loopDay == 28 && currentMonth == 2))
+        {
+          loopDay = 1;
+        }
+        else
+        {
+          loopDay++;
         }
       }
     }
   }
-
-
-
-
-
-
-
-
-
+  parsedData++;
 }
