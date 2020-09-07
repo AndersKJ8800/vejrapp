@@ -13,14 +13,15 @@ let data = // fortolket data fra json, hvert variabel er et array med forskellig
   location: weatherLocation, // lokalitet for vejret
   now: // vejret som det er lige nu.
   {
-    time: [0, 0, 0, 0],
-    temperature: [0, 0, 0, 0],
-    pressure: [0, 0, 0, 0],
-    cloudCover: [0, 0, 0, 0],
-    precipitation: [0, 0, 0, 0],
-    humidity: [0, 0, 0, 0],
-    windSpeed: [0, 0, 0, 0],
-    windDirection: [0, 0, 0, 0]
+    symbol_code: [null, null, null, null],
+    time: [null, null, null, null],
+    temperature: [null, null, null, null],
+    pressure: [null, null, null, null],
+    cloudCover: [null, null, null, null],
+    precipitation: [null, null, null, null],
+    humidity: [null, null, null, null],
+    windSpeed: [null, null, null, null],
+    windDirection: [null, null, null, null]
   },
   next48Hours: [], // vejret de næste 48 timer med mellemrum på 1 time.
   next5Days: []// vejret de næste 5 døgn (4 8-120 timer) med mellemrum på 6 timer.
@@ -36,40 +37,6 @@ let buttons = [
   new Button(300, 600, 80, 50, [0,255,0]),
   new Button(300, 200, 80, 50, [0,0,255])
 ]; // button objekter
-
-function setup()
-{
-  for (let i = 0; i < 48; i++)
-  {
-    data.next48Hours[i] =
-    {
-      time: [0, 0, 0, 0],
-      temperature: [0, 0, 0, 0],
-      pressure: [0, 0, 0, 0],
-      cloudCover: [0, 0, 0, 0],
-      precipitation: [0, 0, 0, 0],
-      humidity: [0, 0, 0, 0],
-      windSpeed: [0, 0, 0, 0],
-      windDirection: [0, 0, 0, 0]
-    };
-  }
-  for (let i = 0; i < 21; i++)
-  {
-    data.next5Days[i] =
-    {
-      time: [0, 0, 0, 0],
-      temperature: [0, 0, 0, 0],
-      cloudCover: [0, 0, 0, 0],
-      precipitation: [0, 0, 0, 0],
-      humidity: [0, 0, 0, 0],
-      windSpeed: [0, 0, 0, 0],
-      windDirection: [0, 0, 0, 0]
-    }
-  }
-  updateLocation(weatherLocation);
-  createCanvas(1,1);
-  windowResized();
-}
 
 function windowResized()
 {
@@ -106,8 +73,102 @@ function updateLocation(newLocation)
 
 function calculateAverages()
 {
-  if (parsedData != 4) break;
+  parsedData++;
+  if (parsedData == 4)
+  {
+    // definerer indeks 3 til gennemsnittet af 0, 1 og 2 ved først at lægge dem til under et loop og derefter dividere med 3
+    for (let i = 0; i < 3; i++)
+    {
+      data.now.temperature[3] += data.now.temperature[i];
+      data.now.pressure[3] += data.now.pressure[i];
+      data.now.cloudCover[3] += data.now.cloudCover[i];
+      data.now.precipitation[3] += data.now.precipitation[i];
+      data.now.humidity[3] += data.now.humidity[i];
+      data.now.windSpeed[3] += data.now.windSpeed[i];
+      data.now.windDirection [3] += data.now.windDirection[i];
+      for (let j = 0; j < data.next48Hours.length; j++)
+      {
+        data.next48Hours[j].temperature[3] += data.next48Hours[j].temperature[i];
+        data.next48Hours[j].pressure[3] += data.next48Hours[j].pressure[i];
+        data.next48Hours[j].cloudCover[3] += data.next48Hours[j].cloudCover[i];
+        data.next48Hours[j].precipitation[3] += data.next48Hours[j].precipitation[i];
+        data.next48Hours[j].humidity[3] += data.next48Hours[j].humidity[i];
+        data.next48Hours[j].windSpeed[3] += data.next48Hours[j].windSpeed[i];
+        data.next48Hours[j].windDirection [3] += data.next48Hours[j].windDirection[i];
+      }
+      for (let j = 0; j < data.next5Days.length; j++)
+      {
+        data.next5Days[j].temperature[3] += data.next5Days[j].temperature[i];
+        data.next5Days[j].cloudCover[3] += data.next5Days[j].cloudCover[i];
+        data.next5Days[j].precipitation[3] += data.next5Days[j].precipitation[i];
+        data.next5Days[j].humidity[3] += data.next5Days[j].humidity[i];
+        data.next5Days[j].windSpeed[3] += data.next5Days[j].windSpeed[i];
+        data.next5Days[j].windDirection [3] += data.next5Days[j].windDirection[i];
+      }
+    }
+    data.now.temperature[3] = round(data.now.temperature[3] / 3, 1);
+    data.now.pressure[3] = round(data.now.pressure[3] / 2, 1);
+    data.now.cloudCover[3] = round(data.now.cloudCover[3] / 3, 1);
+    data.now.precipitation[3] = round(data.now.precipitation[3] / 3, 1);
+    data.now.humidity[3] = round(data.now.humidity[3] / 3, 1);
+    data.now.windSpeed[3] = round(data.now.windSpeed[3] / 3, 1);
+    data.now.windDirection[3] = round(data.now.windDirection[3] / 3, 1);
+    for (let i = 0; i < data.next48Hours.length; i++)
+    {
+      data.next48Hours[i].temperature[3] = round(data.next48Hours[i].temperature[3] / 3, 1);
+      data.next48Hours[i].pressure[3] = round(data.next48Hours[i].pressure[3] / 2, 1);
+      data.next48Hours[i].cloudCover[3] = round(data.next48Hours[i].cloudCover[3] / 3, 1);
+      data.next48Hours[i].precipitation[3] = round(data.next48Hours[i].precipitation[3] / 3, 1);
+      data.next48Hours[i].humidity[3] = round(data.next48Hours[i].humidity[3] / 3, 1);
+      data.next48Hours[i].windSpeed[3] = round(data.next48Hours[i].windSpeed[3] / 3, 1);
+      data.next48Hours[i].windDirection[3] = round(data.next48Hours[i].windDirection[3] / 3, 1);
+    }
+    for (let i = 0; i < data.next5Days.length; i++)
+    {
+      data.next5Days[i].temperature[3] = round(data.next5Days[i].temperature[3] / 3, 1);
+      data.next5Days[i].cloudCover[3] = round(data.next5Days[i].cloudCover[3] / 3, 1);
+      data.next5Days[i].precipitation[3] = round(data.next5Days[i].precipitation[3] / 3, 1);
+      data.next5Days[i].humidity[3] = round(data.next5Days[i].humidity[3] / 3, 1);
+      data.next5Days[i].windSpeed[3] = round(data.next5Days[i].windSpeed[3] / 3, 1);
+      data.next5Days[i].windDirection[3] = round(data.next5Days[i].windDirection[3] / 3, 1);
+    }
+  }
+}
 
+function setup()
+{
+  for (let i = 0; i < 48; i++)
+  {
+    data.next48Hours[i] =
+    {
+      symbol_code: [null, null, null, null],
+      time: [null, null, null, null],
+      temperature: [null, null, null, null],
+      pressure: [null, null, null, null],
+      cloudCover: [null, null, null, null],
+      precipitation: [null, null, null, null],
+      humidity: [null, null, null, null],
+      windSpeed: [null, null, null, null],
+      windDirection: [null, null, null, null]
+    };
+  }
+  for (let i = 0; i < 21; i++)
+  {
+    data.next5Days[i] =
+    {
+      symbol_code: [null, null, null, null],
+      time: [null, null, null, null],
+      temperature: [null, null, null, null],
+      cloudCover: [null, null, null, null],
+      precipitation: [null, null, null, null],
+      humidity: [null, null, null, null],
+      windSpeed: [null, null, null, null],
+      windDirection: [null, null, null, null]
+    }
+  }
+  updateLocation(weatherLocation);
+  createCanvas(1,1);
+  windowResized();
 }
 
 function draw()
@@ -122,7 +183,7 @@ function draw()
   fill(0);
 
   strokeWeight(10);
-  for(let i = 0; i < data.next5Days.length-2; i++)
+  for (let i = 0; i < data.next5Days.length-2; i++)
   {
     stroke(255,0,0);
     line(50 + 90 * i, -data.next5Days[i].temperature[0] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[0] * 50 + 1300);
@@ -133,6 +194,9 @@ function draw()
     stroke(0,255,0);
     line(50 + 90 * i, -data.next5Days[i].temperature[2] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[2] * 50 + 1300);
     //line(50 + 90 * i, -data.next48Hours[i].temperature[2] * 80 + 1600, 50 + 90 * (i + 1), -data.next48Hours[i+1].temperature[2] * 80 + 1600);
+    stroke(255,255,255);
+    line(50 + 90 * i, -data.next5Days[i].temperature[3] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[3] * 50 + 1300);
+    //line(50 + 90 * i, -data.next48Hours[i].temperature[3] * 80 + 1600, 50 + 90 * (i + 1), -data.next48Hours[i+1].temperature[3] * 80 + 1600);
   }
 
   for (let i = 0; i < buttons.length; i++)

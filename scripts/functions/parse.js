@@ -21,6 +21,7 @@ function parseYrWeather()
   }
   // anviser data til vejret nu
   data.now.time[0] = currentTimeseries.time;
+  data.now.symbol_code[0] = convertSymbolCode(currentTimeseries.data.next_1_hours.summary.symbol_code);
   data.now.temperature[0] = currentTimeseries.data.instant.details.air_temperature;
   data.now.pressure[0] = currentTimeseries.data.instant.details.air_pressure_at_sea_level;
   data.now.cloudCover[0] = currentTimeseries.data.instant.details.cloud_area_fraction;
@@ -32,6 +33,7 @@ function parseYrWeather()
   for (let i = 0; i < 48; i++)
   {
     data.next48Hours[i].time[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].time;
+    data.next48Hours[i].symbol_code[0] = convertSymbolCode(importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.next_1_hours.summary.symbol_code);
     data.next48Hours[i].temperature[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_temperature;
     data.next48Hours[i].pressure[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_pressure_at_sea_level;
     data.next48Hours[i].cloudCover[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.cloud_area_fraction;
@@ -52,6 +54,7 @@ function parseYrWeather()
         if (importJson.yr.properties.timeseries[j].time.includes(loopDay + "T" + loopHour) || importJson.yr.properties.timeseries[j].time.includes(loopDay + "T0" + loopHour))
         {
           data.next5Days[i].time[0] = importJson.yr.properties.timeseries[j].time;
+          data.next5Days[i].symbol_code[0] = convertSymbolCode(importJson.yr.properties.timeseries[j].data.next_6_hours.summary.symbol_code);
           data.next5Days[i].temperature[0] = importJson.yr.properties.timeseries[j].data.instant.details.air_temperature;
           data.next5Days[i].cloudCover[0] = importJson.yr.properties.timeseries[j].data.instant.details.cloud_area_fraction;
           data.next5Days[i].humidity[0] = importJson.yr.properties.timeseries[j].data.instant.details.relative_humidity;
@@ -76,7 +79,7 @@ function parseYrWeather()
       }
     }
   }
-  parsedData++;
+  calculateAverages();
 }
 
 // behandler det data fra openWeather med en times intervaller
@@ -85,7 +88,8 @@ function parseOpenWeather1Hour()
 {
   // anviser data til vejret nu
   {
-    data.now.temperature[1] = importJson.openWeather1Hour.current.dt;
+    data.now.time[1] = importJson.openWeather1Hour.current.dt;
+    data.now.symbol_code[1] = convertSymbolCode(importJson.openWeather1Hour.current.weather[0].description);
     data.now.temperature[1] = round((importJson.openWeather1Hour.current.temp - 273.15) * 10) / 10; // temperatur omdannes til celcius og afrundes til et decimal
     data.now.pressure[1] = importJson.openWeather1Hour.current.pressure;
     data.now.cloudCover[1] = importJson.openWeather1Hour.current.clouds;
@@ -107,6 +111,7 @@ function parseOpenWeather1Hour()
     for (let i = 0; i < 48; i++)
     {
       data.next48Hours[i].time[1] = importJson.openWeather1Hour.hourly[i].dt;
+      data.next48Hours[i].symbol_code[1] = convertSymbolCode(importJson.openWeather1Hour.hourly[i].weather[0].description);
       data.next48Hours[i].temperature[1] = round((importJson.openWeather1Hour.hourly[i].temp - 273.15) * 10) / 10
       data.next48Hours[i].pressure[1] = importJson.openWeather1Hour.hourly[i].pressure;
       data.next48Hours[i].cloudCover[1] = importJson.openWeather1Hour.hourly[i].clouds;
@@ -123,7 +128,7 @@ function parseOpenWeather1Hour()
       data.next48Hours[i].windDirection[1] = importJson.openWeather1Hour.hourly[i].wind_deg;
     }
   }
-  parsedData++;
+  calculateAverages();
 }
 
 // behandler det data fra openWeather med tre timers intervaller
@@ -140,7 +145,8 @@ function parseOpenWeather3Hours()
     {
       if (importJson.openWeather3Hours.list[j].dt_txt.includes(loopDay + " " + loopHour) || importJson.openWeather3Hours.list[j].dt_txt.includes(loopDay + " 0" + loopHour))
       {
-        data.next5Days[i].time[1] = importJson.openWeather3Hours.list[j].dt;
+        data.next5Days[i].time[1] = importJson.openWeather3Hours.list[j].dt_txt;
+        data.next5Days[i].symbol_code[1] = convertSymbolCode(importJson.openWeather3Hours.list[j].weather[0].description);
         data.next5Days[i].temperature[1] = round((importJson.openWeather3Hours.list[j].main.temp - 273.15) * 10) / 10;
         data.next5Days[i].cloudCover[1] = importJson.openWeather3Hours.list[j].clouds.all;
         data.next5Days[i].humidity[1] = importJson.openWeather3Hours.list[j].main.humidity;
@@ -171,31 +177,31 @@ function parseOpenWeather3Hours()
       }
     }
   }
-  parsedData++;
+  calculateAverages();
 }
 
 function parseAerisWeather()
 {
   // nu
   data.now.time[2] = importJson.aerisWeather.response[0].periods[0].dateTimeISO;
+  data.now.symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[0].weather);
   data.now.temperature[2] = importJson.aerisWeather.response[0].periods[0].maxTempC;
   data.now.cloudCover[2] = importJson.aerisWeather.response[0].periods[0].sky;
   data.now.humidity[2] = importJson.aerisWeather.response[0].periods[0].humidity;
   data.now.precipitation[2] = importJson.aerisWeather.response[0].periods[0].precipMM;
   data.now.windSpeed[2] = importJson.aerisWeather.response[0].periods[0].windSpeedMaxKPH;
   data.now.windDirection[2] = importJson.aerisWeather.response[0].periods[0].windDir;
-  data.now.pressure[2] = null;
   // næste to døgn
   for (let i = 0; i < 48; i++)
   {
     data.next48Hours[i].time[2] = importJson.aerisWeather.response[0].periods[i].dateTimeISO;
+    data.next48Hours[i].symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[i].weather);
     data.next48Hours[i].temperature[2] = importJson.aerisWeather.response[0].periods[i].maxTempC;
     data.next48Hours[i].cloudCover[2] = importJson.aerisWeather.response[0].periods[i].sky;
     data.next48Hours[i].humidity[2] = importJson.aerisWeather.response[0].periods[i].humidity;
     data.next48Hours[i].precipitation[2] = importJson.aerisWeather.response[0].periods[i].precipMM;
     data.next48Hours[i].windSpeed[2] = importJson.aerisWeather.response[0].periods[i].windSpeedMaxKPH;
     data.next48Hours[i].windDirection[2] = importJson.aerisWeather.response[0].periods[i].windDir;
-    data.next48Hours[i].pressure[2] = null;
   }
   // næste 5 døgn
   {
@@ -212,13 +218,13 @@ function parseAerisWeather()
         || importJson.aerisWeather.response[0].periods[j].dateTimeISO.includes(loopDay + "T0" + loopHour))
         {
           data.next5Days[i].time[2] = importJson.aerisWeather.response[0].periods[j].dateTimeISO;
+          data.next5Days[i].symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[j].weather);
           data.next5Days[i].temperature[2] = importJson.aerisWeather.response[0].periods[j].maxTempC;
           data.next5Days[i].cloudCover[2] = importJson.aerisWeather.response[0].periods[j].sky;
           data.next5Days[i].humidity[2] = importJson.aerisWeather.response[0].periods[j].humidity;
           data.next5Days[i].precipitation[2] = importJson.aerisWeather.response[0].periods[j].precipMM; // to-do; tager kun nedbør den kommende time i stedet for 6 timer
           data.next5Days[i].windSpeed[2] = importJson.aerisWeather.response[0].periods[j].windSpeedMaxKPH;
           data.next5Days[i].windDirection[2] = importJson.aerisWeather.response[0].periods[j].windDir;
-          //data.next5Days[i].pressure[2] = null;
           break
         }
       }
@@ -237,5 +243,206 @@ function parseAerisWeather()
       }
     }
   }
-  parsedData++;
+  calculateAverages();
+}
+
+function convertSymbolCode(string)
+{
+  switch(string)
+  {
+    case "clearsky_day": // yr
+    case "clearsky_polartwilight": // yr
+      return "01d" // skyfrit, dag
+
+    case "clearsky_night":
+      return "01n" // skyfrit, nat
+
+    case "fair_day": // yr
+    case "fair_polartwilight": // yr
+      return "02d" // lidt skyer, dag
+
+    case "fair_night": // yr
+      return "02n" // lidt skyer, nat
+
+    case "":
+      return "03d" // delvist skyet, dag
+
+    case "":
+      return "03n" // delvist skyet, nat
+
+    case "cloudy": // yr
+      return "04" // overskyet
+
+    case "":
+      return "05d" // delvist skyet, moderat regn, dag
+
+    case "":
+      return "05n" // delvist skyet, moderat regn, nat
+
+    case "":
+      return "06d" // delvist skyet, moderat regn, lyn, dag
+
+    case "":
+      return "06n" // delvist skyet, moderat regn, lyn, nat
+
+    case "":
+      return "07d" // delvist skyet, moderat slud, dag
+
+    case "":
+      return "07n" // delvist skyet, moderat slud, dag
+
+    case "":
+      return "08d" // delvist skyet, moderat sne, dag
+
+    case "":
+      return "08n" // delvist skyet, moderat sne, nat
+
+    case "":
+      return "09" // overskyet, moderat regn
+
+    case "heavyrain": // yr
+      return "10" // overskyet, meget regn
+
+    case "heavyrainandthunder": // yr
+      return "11" // overskyet, meget regn, lyn
+
+    case "":
+      return "12" // overskyet, moderat slud
+
+    case "":
+      return "13" // overskyet, moderat sne
+
+    case "":
+      return "14" // overskyet, moderat sne, lyn
+
+    case "fog": // yr
+      return "15" // tåge
+
+    case "":
+      return "20d" // delvist skyet, moderat slud, lyn, dag
+
+    case "":
+      return "20n" // delvist skyet, moderat slud, lyn, nat
+
+    case "":
+      return "21d" // delvist skyet, moderat sne, lyn, dag
+
+    case "":
+      return "21n" // delvist skyet, moderat sne, lyn, dag
+
+    case "":
+      return "22" // overskyet, moderat regn, lyn
+
+    case "":
+      return "23" // overskyet, moderat slud, lyn
+
+    case "":
+      return "24d" // delvist skyet, lidt regn, lyn, dag
+
+    case "":
+      return "24n" // delvist skyet, lidt regn, lyn, dag
+
+    case "heavyrainshowersandthunder_day": // yr
+    case "heavyrainshowersandthunder_polartwilight": // yr
+      return "25d" // delvist skyet, meget regn, lyn, dag
+
+    case "heavyrainshowersandthunder_night": // yr
+      return "25n" // delvist skyet, meget regn, lyn, nat
+
+    case "":
+      return "26d" // delvist skyet, lidt slud, lyn, dag
+
+    case "":
+      return "26n" // delvist skyet, lidt slud, lyn, nat
+
+    case "":
+      return "27d" // delvist skyet, meget slud, lyn, dag
+
+    case "":
+      return "27n" // delvist skyet, meget slud, lyn, nat
+
+    case "":
+      return "28d" // delvist skyet, lidt sne, lyn, dag
+
+    case "":
+      return "28n" // delvist skyet, lidt sne, lyn, nat
+
+    case "":
+      return "29d" // delvist skyet, meget sne, lyn, dag
+
+    case "":
+      return "29n" // delvist skyet, meget sne, lyn, nat
+
+    case "":
+      return "30" // overskyet, lidt regn, lyn
+
+    case "":
+      return "31" // overskyet, lidt slud, lyn
+
+    case "":
+      return "32" // overskyet, meget slud, lyn
+
+    case "":
+      return "33" // overskyet, lidt sne, lyn
+
+    case "":
+      return "34" // overskyet, meget sne, lyn
+
+    case "":
+      return "40d" // delvist skyet, lidt regn, dag
+
+    case "":
+      return "40n" // delvist skyet, lidt regn, nat
+
+    case "heavyrainshowers_day": // yr
+    case "heavyrainshowers_polartwilight": // yr
+      return "41d" // delvist skyet, meget regn, dag
+
+    case "heavyrainshowers_night": // yr
+      return "41n" // delvist skyet, meget regn, nat
+
+    case "":
+      return "42d" // delvist skyet, lidt slud, dag
+
+    case "":
+      return "42n" // delvist skyet, lidt slud, dag
+
+    case "":
+      return "43d" // delvist skyet, meget slud, dag
+
+    case "":
+      return "43n" // delvist skyet, meget slud, dag
+
+    case "":
+      return "44d" // delvist skyet, lidt sne, dag
+
+    case "":
+      return "44n" // delvist skyet, lidt sne, nat
+
+    case "":
+      return "45d" // delvist skyet, meget sne, dag
+
+    case "":
+      return "45n" // delvist skyet, meget sne, nat
+
+    case "":
+      return "46" // overskyet, lidt regn
+
+    case "":
+      return "47" // overskyet, lidt slud
+
+    case "":
+      return "48" // overskyet, meget slud
+
+    case "":
+      return "49" // overskyet, lidt sne
+
+    case "":
+      return "50" // overskyet, meget sne
+
+    default:
+      return "unknown"
+  }
+
+
 }
