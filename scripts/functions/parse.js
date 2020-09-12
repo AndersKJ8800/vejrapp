@@ -20,8 +20,9 @@ function parseYrWeather()
     }
   }
   // anviser data til vejret nu
+  data.now.isDay = isDay(currentTimeseries.data.next_1_hours.summary.symbol_code);
   data.now.time[0] = currentTimeseries.time;
-  data.now.symbol_code[0] = convertSymbolCode(currentTimeseries.data.next_1_hours.summary.symbol_code);
+  data.now.symbol_code[0] = convertSymbolCode(currentTimeseries.data.next_1_hours.summary.symbol_code, data.now.isDay);
   data.now.temperature[0] = currentTimeseries.data.instant.details.air_temperature;
   data.now.pressure[0] = currentTimeseries.data.instant.details.air_pressure_at_sea_level;
   data.now.cloudCover[0] = currentTimeseries.data.instant.details.cloud_area_fraction;
@@ -32,8 +33,9 @@ function parseYrWeather()
   // anviser data til næste 48 timer
   for (let i = 0; i < 48; i++)
   {
+    data.next48Hours[i].isDay = isDay(importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.next_1_hours.summary.symbol_code);
     data.next48Hours[i].time[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].time;
-    data.next48Hours[i].symbol_code[0] = convertSymbolCode(importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.next_1_hours.summary.symbol_code);
+    data.next48Hours[i].symbol_code[0] = convertSymbolCode(importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.next_1_hours.summary.symbol_code, data.next48Hours[i].isDay);
     data.next48Hours[i].temperature[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_temperature;
     data.next48Hours[i].pressure[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.air_pressure_at_sea_level;
     data.next48Hours[i].cloudCover[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.instant.details.cloud_area_fraction;
@@ -53,8 +55,9 @@ function parseYrWeather()
       {
         if (importJson.yr.properties.timeseries[j].time.includes(loopDay + "T" + loopHour) || importJson.yr.properties.timeseries[j].time.includes(loopDay + "T0" + loopHour))
         {
+          data.next5Days[i].isDay = isDay(importJson.yr.properties.timeseries[j].data.next_6_hours.summary.symbol_code);
           data.next5Days[i].time[0] = importJson.yr.properties.timeseries[j].time;
-          data.next5Days[i].symbol_code[0] = convertSymbolCode(importJson.yr.properties.timeseries[j].data.next_6_hours.summary.symbol_code);
+          data.next5Days[i].symbol_code[0] = convertSymbolCode(importJson.yr.properties.timeseries[j].data.next_6_hours.summary.symbol_code, data.next5Days[i].isDay);
           data.next5Days[i].temperature[0] = importJson.yr.properties.timeseries[j].data.instant.details.air_temperature;
           data.next5Days[i].cloudCover[0] = importJson.yr.properties.timeseries[j].data.instant.details.cloud_area_fraction;
           data.next5Days[i].humidity[0] = importJson.yr.properties.timeseries[j].data.instant.details.relative_humidity;
@@ -89,7 +92,7 @@ function parseOpenWeather1Hour()
   // anviser data til vejret nu
   {
     data.now.time[1] = importJson.openWeather1Hour.current.dt;
-    data.now.symbol_code[1] = convertSymbolCode(importJson.openWeather1Hour.current.weather[0].description);
+    data.now.symbol_code[1] = convertSymbolCode(importJson.openWeather1Hour.current.weather[0].description, data.now.isDay);
     data.now.temperature[1] = round((importJson.openWeather1Hour.current.temp - 273.15) * 10) / 10; // temperatur omdannes til celcius og afrundes til et decimal
     data.now.pressure[1] = importJson.openWeather1Hour.current.pressure;
     data.now.cloudCover[1] = importJson.openWeather1Hour.current.clouds;
@@ -111,7 +114,7 @@ function parseOpenWeather1Hour()
     for (let i = 0; i < 48; i++)
     {
       data.next48Hours[i].time[1] = importJson.openWeather1Hour.hourly[i].dt;
-      data.next48Hours[i].symbol_code[1] = convertSymbolCode(importJson.openWeather1Hour.hourly[i].weather[0].description);
+      data.next48Hours[i].symbol_code[1] = convertSymbolCode(importJson.openWeather1Hour.hourly[i].weather[0].description, data.next48Hours[i].isDay);
       data.next48Hours[i].temperature[1] = round((importJson.openWeather1Hour.hourly[i].temp - 273.15) * 10) / 10
       data.next48Hours[i].pressure[1] = importJson.openWeather1Hour.hourly[i].pressure;
       data.next48Hours[i].cloudCover[1] = importJson.openWeather1Hour.hourly[i].clouds;
@@ -146,7 +149,7 @@ function parseOpenWeather3Hours()
       if (importJson.openWeather3Hours.list[j].dt_txt.includes(loopDay + " " + loopHour) || importJson.openWeather3Hours.list[j].dt_txt.includes(loopDay + " 0" + loopHour))
       {
         data.next5Days[i].time[1] = importJson.openWeather3Hours.list[j].dt_txt;
-        data.next5Days[i].symbol_code[1] = convertSymbolCode(importJson.openWeather3Hours.list[j].weather[0].description);
+        data.next5Days[i].symbol_code[1] = convertSymbolCode(importJson.openWeather3Hours.list[j].weather[0].description, data.next5Days[i].isDay);
         data.next5Days[i].temperature[1] = round((importJson.openWeather3Hours.list[j].main.temp - 273.15) * 10) / 10;
         data.next5Days[i].cloudCover[1] = importJson.openWeather3Hours.list[j].clouds.all;
         data.next5Days[i].humidity[1] = importJson.openWeather3Hours.list[j].main.humidity;
@@ -184,7 +187,7 @@ function parseAerisWeather()
 {
   // nu
   data.now.time[2] = importJson.aerisWeather.response[0].periods[0].dateTimeISO;
-  data.now.symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[0].weather);
+  data.now.symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[0].weather, data.now.isDay);
   data.now.temperature[2] = importJson.aerisWeather.response[0].periods[0].maxTempC;
   data.now.cloudCover[2] = importJson.aerisWeather.response[0].periods[0].sky;
   data.now.humidity[2] = importJson.aerisWeather.response[0].periods[0].humidity;
@@ -195,7 +198,7 @@ function parseAerisWeather()
   for (let i = 0; i < 48; i++)
   {
     data.next48Hours[i].time[2] = importJson.aerisWeather.response[0].periods[i].dateTimeISO;
-    data.next48Hours[i].symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[i].weather);
+    data.next48Hours[i].symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[i].weather, data.next48Hours[i].isDay);
     data.next48Hours[i].temperature[2] = importJson.aerisWeather.response[0].periods[i].maxTempC;
     data.next48Hours[i].cloudCover[2] = importJson.aerisWeather.response[0].periods[i].sky;
     data.next48Hours[i].humidity[2] = importJson.aerisWeather.response[0].periods[i].humidity;
@@ -218,7 +221,7 @@ function parseAerisWeather()
         || importJson.aerisWeather.response[0].periods[j].dateTimeISO.includes(loopDay + "T0" + loopHour))
         {
           data.next5Days[i].time[2] = importJson.aerisWeather.response[0].periods[j].dateTimeISO;
-          data.next5Days[i].symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[j].weather);
+          data.next5Days[i].symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[j].weather, data.next5Days[i].isDay);
           data.next5Days[i].temperature[2] = importJson.aerisWeather.response[0].periods[j].maxTempC;
           data.next5Days[i].cloudCover[2] = importJson.aerisWeather.response[0].periods[j].sky;
           data.next5Days[i].humidity[2] = importJson.aerisWeather.response[0].periods[j].humidity;
@@ -246,203 +249,226 @@ function parseAerisWeather()
   calculateAverages();
 }
 
-function convertSymbolCode(string)
+function isDay(string)
 {
+  if (string.includes("day")) return true;
+  if (string.includes("night")) return false;
+  return null;
+}
+
+function convertSymbolCode(string, isDay)
+{
+  let symbolCode;
+
+  string = string.replace("_day", "");
+  string = string.replace("_night", "");
+
   switch(string)
   {
-    case "clearsky_day": // yr
-    case "clearsky_polartwilight": // yr
-      return "01d" // skyfrit, dag
+    case "clearsky": // yr
+      symbolCode = "01"; // skyfrit
+      break;
 
-    case "clearsky_night":
-      return "01n" // skyfrit, nat
+    case "fair": // yr
+      symbolCode = "02" // lidt skyer, nat
+      break;
 
-    case "fair_day": // yr
-    case "fair_polartwilight": // yr
-      return "02d" // lidt skyer, dag
-
-    case "fair_night": // yr
-      return "02n" // lidt skyer, nat
-
-    case "":
-      return "03d" // delvist skyet, dag
-
-    case "":
-      return "03n" // delvist skyet, nat
+    case "partlycloudy": // yr
+      symbolCode = "03" // delvist skyet, dag
+      break;
 
     case "cloudy": // yr
-      return "04" // overskyet
+      symbolCode = "04" // overskyet
+      break;
 
-    case "":
-      return "05d" // delvist skyet, moderat regn, dag
+    case "rainshowers": // yr
+      symbolCode = "05" // delvist skyet, moderat regn, dag
+      break;
 
-    case "":
-      return "05n" // delvist skyet, moderat regn, nat
+    case "rainshowersandthunder":
+      symbolCode = "06" // delvist skyet, moderat regn, lyn, dag
+      break;
 
-    case "":
-      return "06d" // delvist skyet, moderat regn, lyn, dag
+    case "sleetshowers":
+      symbolCode = "07" // delvist skyet, moderat slud, dag
+      break;
 
-    case "":
-      return "06n" // delvist skyet, moderat regn, lyn, nat
+    case "snowshowers":
+      symbolCode = "08" // delvist skyet, moderat sne, nat
+      break;
 
-    case "":
-      return "07d" // delvist skyet, moderat slud, dag
-
-    case "":
-      return "07n" // delvist skyet, moderat slud, dag
-
-    case "":
-      return "08d" // delvist skyet, moderat sne, dag
-
-    case "":
-      return "08n" // delvist skyet, moderat sne, nat
-
-    case "":
-      return "09" // overskyet, moderat regn
+    case "rain":
+      symbolCode = "09" // overskyet, moderat regn
+      break;
 
     case "heavyrain": // yr
-      return "10" // overskyet, meget regn
+      symbolCode = "10" // overskyet, meget regn
+      break;
 
     case "heavyrainandthunder": // yr
-      return "11" // overskyet, meget regn, lyn
+      symbolCode = "11" // overskyet, meget regn, lyn
+      break;
 
-    case "":
-      return "12" // overskyet, moderat slud
+    case "sleet":
+      symbolCode = "12" // overskyet, moderat slud
+      break;
 
-    case "":
-      return "13" // overskyet, moderat sne
+    case "snow":
+      symbolCode = "13" // overskyet, moderat sne
+      break;
 
-    case "":
-      return "14" // overskyet, moderat sne, lyn
+    case "snowandthunder":
+      symbolCode = "14" // overskyet, moderat sne, lyn
+      break;
 
     case "fog": // yr
-      return "15" // tåge
+      symbolCode = "15" // tåge
+      break;
 
-    case "":
-      return "20d" // delvist skyet, moderat slud, lyn, dag
+    case "sleetshowersandthunder":
+      symbolCode = "20" // delvist skyet, moderat slud, lyn, dag
+      break;
 
-    case "":
-      return "20n" // delvist skyet, moderat slud, lyn, nat
+    case "snowshowersandthunder":
+      symbolCode = "21" // delvist skyet, moderat sne, lyn, dag
+      break;
 
-    case "":
-      return "21d" // delvist skyet, moderat sne, lyn, dag
+    case "rainandthunder":
+      symbolCode = "22" // overskyet, moderat regn, lyn
+      break;
 
-    case "":
-      return "21n" // delvist skyet, moderat sne, lyn, dag
+    case "sleetandthundert":
+      symbolCode = "23" // overskyet, moderat slud, lyn
+      break;
 
-    case "":
-      return "22" // overskyet, moderat regn, lyn
+    case "lightrainshowersandthunder": // yr
+      symbolCode = "24" // delvist skyet, lidt regn, lyn, dag
+      break;
 
-    case "":
-      return "23" // overskyet, moderat slud, lyn
+    case "heavyrainshowersandthunder": // yr
+      symbolCode = "25" // delvist skyet, meget regn, lyn, dag
+      break;
 
-    case "":
-      return "24d" // delvist skyet, lidt regn, lyn, dag
+    case "lightsleetshowersandthunder":
+      symbolCode = "26" // delvist skyet, lidt slud, lyn, nat
+      break;
 
-    case "":
-      return "24n" // delvist skyet, lidt regn, lyn, dag
+    case "heavysleetshowersandthunder":
+      symbolCode = "27" // delvist skyet, meget slud, lyn, nat
+      break;
 
-    case "heavyrainshowersandthunder_day": // yr
-    case "heavyrainshowersandthunder_polartwilight": // yr
-      return "25d" // delvist skyet, meget regn, lyn, dag
+    case "lightsnowshowersandthunder":
+      symbolCode = "28" // delvist skyet, lidt sne, lyn, nat
+      break;
 
-    case "heavyrainshowersandthunder_night": // yr
-      return "25n" // delvist skyet, meget regn, lyn, nat
+    case "heavysnowshowersandthunder":
+      symbolCode = "29" // delvist skyet, meget sne, lyn, nat
+      break;
 
-    case "":
-      return "26d" // delvist skyet, lidt slud, lyn, dag
+    case "lightrainandthunder":
+      symbolCode = "30" // overskyet, lidt regn, lyn
+      break;
 
-    case "":
-      return "26n" // delvist skyet, lidt slud, lyn, nat
+    case "lightsleetandthunder":
+      symbolCode = "31" // overskyet, lidt slud, lyn
+      break;
 
-    case "":
-      return "27d" // delvist skyet, meget slud, lyn, dag
+    case "heavysleetandthunder":
+      symbolCode = "32" // overskyet, meget slud, lyn
+      break;
 
-    case "":
-      return "27n" // delvist skyet, meget slud, lyn, nat
+    case "lightsnowandthunder":
+      symbolCode = "33" // overskyet, lidt sne, lyn
+      break;
 
-    case "":
-      return "28d" // delvist skyet, lidt sne, lyn, dag
+    case "heavysnowandthunder":
+      symbolCode = "34" // overskyet, meget sne, lyn
+      break;
 
-    case "":
-      return "28n" // delvist skyet, lidt sne, lyn, nat
+    case "lightrainshowers": // yr
+      symbolCode = "40" // delvist skyet, lidt regn, nat
+      break;
 
-    case "":
-      return "29d" // delvist skyet, meget sne, lyn, dag
+    case "heavyrainshowers": // yr
+      symbolCode = "41" // delvist skyet, meget regn, dag
+      break;
 
-    case "":
-      return "29n" // delvist skyet, meget sne, lyn, nat
+    case "lightsleetshowers":
+      symbolCode = "42" // delvist skyet, lidt slud, dag
+      break;
 
-    case "":
-      return "30" // overskyet, lidt regn, lyn
+    case "heavysleetshowers":
+      symbolCode = "43" // delvist skyet, meget slud, dag
+      break;
 
-    case "":
-      return "31" // overskyet, lidt slud, lyn
+    case "lightsnowshowers":
+      symbolCode = "44" // delvist skyet, lidt sne, dag
+      break;
 
-    case "":
-      return "32" // overskyet, meget slud, lyn
+    case "heavysnowshowers":
+      symbolCode = "45" // delvist skyet, meget sne, nat
+      break;
 
-    case "":
-      return "33" // overskyet, lidt sne, lyn
+    case "lightrain":
+      symbolCode = "46" // overskyet, lidt regn
+      break;
 
-    case "":
-      return "34" // overskyet, meget sne, lyn
+    case "lightsleet":
+      symbolCode = "47" // overskyet, lidt slud
+      break;
 
-    case "":
-      return "40d" // delvist skyet, lidt regn, dag
+    case "heavysleet":
+      symbolCode = "48" // overskyet, meget slud
+      break;
 
-    case "":
-      return "40n" // delvist skyet, lidt regn, nat
+    case "lightsnow":
+      symbolCode = "49" // overskyet, lidt sne
+      break;
 
-    case "heavyrainshowers_day": // yr
-    case "heavyrainshowers_polartwilight": // yr
-      return "41d" // delvist skyet, meget regn, dag
-
-    case "heavyrainshowers_night": // yr
-      return "41n" // delvist skyet, meget regn, nat
-
-    case "":
-      return "42d" // delvist skyet, lidt slud, dag
-
-    case "":
-      return "42n" // delvist skyet, lidt slud, dag
-
-    case "":
-      return "43d" // delvist skyet, meget slud, dag
-
-    case "":
-      return "43n" // delvist skyet, meget slud, dag
-
-    case "":
-      return "44d" // delvist skyet, lidt sne, dag
-
-    case "":
-      return "44n" // delvist skyet, lidt sne, nat
-
-    case "":
-      return "45d" // delvist skyet, meget sne, dag
-
-    case "":
-      return "45n" // delvist skyet, meget sne, nat
-
-    case "":
-      return "46" // overskyet, lidt regn
-
-    case "":
-      return "47" // overskyet, lidt slud
-
-    case "":
-      return "48" // overskyet, meget slud
-
-    case "":
-      return "49" // overskyet, lidt sne
-
-    case "":
-      return "50" // overskyet, meget sne
+    case "heavysnow":
+      symbolCode = "50" // overskyet, meget sne
+      break;
 
     default:
-      return "unknown"
+      symbolCode = "unknown";
+      break;
   }
 
+  switch (symbolCode)
+  {
+    case "01":
+    case "02":
+    case "03":
+    case "40":
+    case "05":
+    case "41":
+    case "24":
+    case "06":
+    case "25":
+    case "42":
+    case "07":
+    case "43":
+    case "26":
+    case "20":
+    case "27":
+    case "44":
+    case "08":
+    case "45":
+    case "28":
+    case "21":
+    case "29":
+      if (isDay)
+      {
+        symbolCode += "d";
+      }
+      else
+      {
+        symbolCode += "n";
+      }
+      break
+
+  }
+
+  return symbolCode;
 
 }

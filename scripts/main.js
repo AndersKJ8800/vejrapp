@@ -13,6 +13,7 @@ let data = // fortolket data fra json, hvert variabel er et array med forskellig
   location: weatherLocation, // lokalitet for vejret
   now: // vejret som det er lige nu.
   {
+    isDay: null,
     symbol_code: [null, null, null, null],
     time: [null, null, null, null],
     temperature: [null, null, null, null],
@@ -141,6 +142,7 @@ function setup()
   {
     data.next48Hours[i] =
     {
+      isDay: null,
       symbol_code: [null, null, null, null],
       time: [null, null, null, null],
       temperature: [null, null, null, null],
@@ -156,6 +158,7 @@ function setup()
   {
     data.next5Days[i] =
     {
+      isDay: null,
       symbol_code: [null, null, null, null],
       time: [null, null, null, null],
       temperature: [null, null, null, null],
@@ -183,20 +186,23 @@ function draw()
   fill(0);
 
   strokeWeight(10);
-  for (let i = 0; i < data.next5Days.length-2; i++)
+  for (let i = 0; i < data.next48Hours.length-2; i++)
   {
     stroke(255,0,0);
-    line(50 + 90 * i, -data.next5Days[i].temperature[0] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[0] * 50 + 1300);
-    //line(50 + 90 * i, -data.next48Hours[i].temperature[0] * 80 + 1600, 50 + 90 * (i + 1), -data.next48Hours[i+1].temperature[0] * 80 + 1600);
-    stroke(0,0,255);
-    line(50 + 90 * i, -data.next5Days[i].temperature[1] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[1] * 50 + 1300);
-    //line(50 + 90 * i, -data.next48Hours[i].temperature[1] * 80 + 1600, 50 + 90 * (i + 1), -data.next48Hours[i+1].temperature[1] * 80 + 1600);
-    stroke(0,255,0);
-    line(50 + 90 * i, -data.next5Days[i].temperature[2] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[2] * 50 + 1300);
-    //line(50 + 90 * i, -data.next48Hours[i].temperature[2] * 80 + 1600, 50 + 90 * (i + 1), -data.next48Hours[i+1].temperature[2] * 80 + 1600);
-    stroke(255,255,255);
-    line(50 + 90 * i, -data.next5Days[i].temperature[3] * 50 + 1300, 50 + 90 * (i + 1), -data.next5Days[i+1].temperature[3] * 50 + 1300);
-    //line(50 + 90 * i, -data.next48Hours[i].temperature[3] * 80 + 1600, 50 + 90 * (i + 1), -data.next48Hours[i+1].temperature[3] * 80 + 1600);
+    line(50 + 39 * i, -data.next48Hours[i].temperature[0] * 50 + 1400, 50 + 39 * (i + 1), -data.next48Hours[i+1].temperature[0] * 50 + 1400);
+
+    try
+    {
+      if (data.next48Hours[i].symbol_code.typeof != "undefined")
+      {
+        translate(50,0);
+        scale(0.5);
+        image(weatherIcons[data.next48Hours[i].symbol_code[0]], 78 * i, 100);
+        scale(2);
+        translate(-50,0);
+      }
+    }
+    catch (expression) {}
   }
 
   for (let i = 0; i < buttons.length; i++)
