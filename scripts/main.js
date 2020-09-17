@@ -189,7 +189,7 @@ function draw()
   for (let i = 0; i < data.next48Hours.length-2; i++)
   {
     stroke(255,0,0);
-    line(50 + 39 * i, -data.next48Hours[i].temperature[0] * 50 + 1400, 50 + 39 * (i + 1), -data.next48Hours[i+1].temperature[0] * 50 + 1400);
+    line(50 + 39 * i, -data.next48Hours[i].temperature[0] * 50 + 1100, 50 + 39 * (i + 1), -data.next48Hours[i+1].temperature[0] * 50 + 1100);
 
     try
     {
