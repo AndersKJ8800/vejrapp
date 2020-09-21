@@ -35,8 +35,8 @@ let windowXDiff = 0; // forskel mellem appens og vinduets opløsning
 let windowYDiff = 0; // ^
 let button =
 {
-  slideshowLeft: new Button(10, 400, 80, 200, ["mainMenu"], [255,0,0]),
-  slideshowRight: new Button(RES_X - 90, 400, 80, 200, ["mainMenu"], [0,255,0])
+  slideshowLeft: new Button("slideshowLeft", 0, 0, 280, 960, ["mainMenu"]),
+  slideshowRight: new Button("slideshowRight", RES_X - 280, 0, 280, 960, ["mainMenu"])
 }; // button objekter
 let slideshow = {};
 let currentSlideshowImage = 0;
@@ -85,10 +85,13 @@ function setup()
   g = createGraphics(RES_X, RES_Y);
   slideshow =
   [
-    new SlideshowImage("running"),
-    new SlideshowImage("rowing"),
-    new SlideshowImage("football"),
-    new SlideshowImage("cycling")
+    new SlideshowImage("faldskærm"),
+    new SlideshowImage("flyver"),
+    new SlideshowImage("kajak"),
+    new SlideshowImage("løb"),
+    new SlideshowImage("mountainbike"),
+    new SlideshowImage("sejlbåd"),
+    new SlideshowImage("vandre")
   ];
 }
 

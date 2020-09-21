@@ -10,6 +10,7 @@ class SlideshowImage
     noOfSlideshowImages++;
     this.image = backgroundImages[activityType];
     this.activityType = activityType;
+    button["slideshowImage" + this.activityType] = new Button("start" + activityType, RES_X / 2, RES_Y / 1.25, 200, 120, "mainMenu");
   }
   update()
   {
@@ -17,8 +18,15 @@ class SlideshowImage
   }
   draw()
   {
-    g.image(this.image, (this.no - currentSlideshowImage) * RES_X + slideshowImageOffset * slideshowScrollingDirection, 0);
-    g.image(this.image, (this.no - currentSlideshowImage - noOfSlideshowImages) * RES_X + slideshowImageOffset * slideshowScrollingDirection, 0);
+    g.translate((this.no - currentSlideshowImage) * RES_X + slideshowImageOffset * slideshowScrollingDirection, 0);
+    g.image(this.image, 0, 0);
+    button["slideshowImage" + this.activityType].draw();
+    g.translate(-((this.no - currentSlideshowImage) * RES_X + slideshowImageOffset * slideshowScrollingDirection), 0);
+
+    g.translate((this.no - currentSlideshowImage - noOfSlideshowImages) * RES_X + slideshowImageOffset * slideshowScrollingDirection, 0);
+    g.image(this.image, 0, 0);
+
+    g.translate(-((this.no - currentSlideshowImage - noOfSlideshowImages) * RES_X + slideshowImageOffset * slideshowScrollingDirection), 0);
   }
 }
 
@@ -45,7 +53,7 @@ function drawSlideshow()
 {
   if (slideshowImageOffset > 0)
   {
-    slideshowImageOffset -= slideshowImageOffset / 20 + 2;
+    slideshowImageOffset -= slideshowImageOffset / (20) + 1;
   }
   if (slideshowImageOffset <= 0)
   {

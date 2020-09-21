@@ -11,9 +11,12 @@ function preload()
 
   backgroundImages =
   {
-    running: loadImage("assets/backgrounds/running.png"),
-    rowing: loadImage("assets/backgrounds/rowing.png"),
-    football: loadImage("assets/backgrounds/football.png"),
-    cycling: loadImage("assets/backgrounds/cycling.png")
+    faldskærm: loadImage("assets/backgrounds/faldskærm.jpg"),
+    flyver: loadImage("assets/backgrounds/flyver.jpg"),
+    vandre: loadImage("assets/backgrounds/vandre.jpg"),
+    løb: loadImage("assets/backgrounds/løb.jpg"),
+    mountainbike: loadImage("assets/backgrounds/mountainbike.jpg"),
+    sejlbåd: loadImage("assets/backgrounds/sejlbåd.jpg"),
+    kajak: loadImage("assets/backgrounds/kajak.png")
   }
 }
