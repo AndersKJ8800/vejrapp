@@ -1,4 +1,5 @@
 let weatherIcons = {}; // defineres som objekt
+let backgroundImages = {};
 
 function preload()
 {
@@ -6,5 +7,12 @@ function preload()
   for (let i = 0; i < 62; i++)
   {
     weatherIcons[iconNames[i]] = loadImage("assets/icons/" + iconNames[i] + ".png");
+  }
+
+  backgroundImages =
+  {
+    running: loadImage("assets/backgrounds/running.png"),
+    rowing: loadImage("assets/backgrounds/rowing.png"),
+    football: loadImage("assets/backgrounds/football.png")
   }
 }
