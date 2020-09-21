@@ -13,6 +13,7 @@ function preload()
   {
     running: loadImage("assets/backgrounds/running.png"),
     rowing: loadImage("assets/backgrounds/rowing.png"),
-    football: loadImage("assets/backgrounds/football.png")
+    football: loadImage("assets/backgrounds/football.png"),
+    cycling: loadImage("assets/backgrounds/cycling.png")
   }
 }

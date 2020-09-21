@@ -33,12 +33,18 @@ let RES_Y = 960; // ^
 let scaling = 1; // appens skalering
 let windowXDiff = 0; // forskel mellem appens og vinduets opløsning
 let windowYDiff = 0; // ^
-let buttons = [
-  new Button(200, 400, 80, 50, [255,0,0]),
-  new Button(300, 600, 80, 50, [0,255,0]),
-  new Button(300, 200, 80, 50, [0,0,255])
-]; // button objekter
+let button =
+{
+  slideshowLeft: new Button(10, 400, 80, 200, ["mainMenu"], [255,0,0]),
+  slideshowRight: new Button(RES_X - 90, 400, 80, 200, ["mainMenu"], [0,255,0])
+}; // button objekter
 let slideshow = {};
+let currentSlideshowImage = 0;
+let g; // grafik buffer hvor alt tegnes som tegnes til sidst i et frame
+let activeWindow = // objekt der indikerer hvilke vinduer er aktive og kan interageres med
+{
+  mainMenu: true
+}
 
 function setup()
 {
@@ -76,12 +82,14 @@ function setup()
   updateLocation(weatherLocation);
   createCanvas(1,1);
   windowResized();
+  g = createGraphics(RES_X, RES_Y);
   slideshow =
-  {
-    running: new SlideshowImage("running"),
-    rowing: new SlideshowImage("rowing"),
-    football: new SlideshowImage("football")
-  }
+  [
+    new SlideshowImage("running"),
+    new SlideshowImage("rowing"),
+    new SlideshowImage("football"),
+    new SlideshowImage("cycling")
+  ];
 }
 
 function draw()
@@ -95,7 +103,19 @@ function draw()
   textSize(50);
   fill(0);
 
+  drawSlideshow();
+
+  if (activeWindow.mainMenu)
   {
+    button["slideshowLeft"].draw();
+    button["slideshowRight"].draw();
+  }
+
+
+
+  image(g,0,0);
+
+  /*{
     let no = 0
     strokeWeight(2);
     for (let i = 0; i < data.next48Hours.length - 1; i++)
@@ -120,8 +140,5 @@ function draw()
 
       translate(-50,0);
     }
-  }
-
-
-
+  }*/
 }
