@@ -3,8 +3,8 @@ class Button
   constructor(type, x, y, width, height, activeWindow)
   {
     this.type = type;
-    this.x = x;
-    this.y = y;
+    this.x = x - width / 2;
+    this.y = y - height / 2;
     this.width = width;
     this.height = height;
     this.activeWindow = activeWindow;
@@ -45,7 +45,6 @@ class Button
       default:
         g.noStroke();
         g.fill(255,0,0);
-        print("fuck");
         g.rect(this.x, this.y, this.width, this.height);
     }
   }

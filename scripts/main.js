@@ -35,8 +35,8 @@ let windowXDiff = 0; // forskel mellem appens og vinduets opløsning
 let windowYDiff = 0; // ^
 let button =
 {
-  slideshowLeft: new Button("slideshowLeft", 0, 0, 280, 960, ["mainMenu"]),
-  slideshowRight: new Button("slideshowRight", RES_X - 280, 0, 280, 960, ["mainMenu"])
+  slideshowLeft: new Button("slideshowLeft", 140, RES_Y / 1.8, 280, 960, ["mainMenu"]),
+  slideshowRight: new Button("slideshowRight", RES_X - 140, RES_Y / 1.8, 280, 960, ["mainMenu"])
 }; // button objekter
 let slideshow = {};
 let currentSlideshowImage = 0;
