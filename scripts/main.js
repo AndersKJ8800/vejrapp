@@ -120,7 +120,7 @@ function draw()
       g.circle(RES_X / 2 - 3.5 * 45 + i * 45, RES_Y / 1.08, 20);
       if (i == currentSlideshowImage)
       {
-        g.fill(color[0] + abs(slideshowImageOffset / (RES_X / 0.75)) * (color[1] - color[0]));
+        g.fill(color[0] + abs(slideshowImageOffset / (RES_X / 0.85)) * (color[1] - color[0]));
         g.circle(RES_X / 2 - 3.5 * 45 + i * 45, RES_Y / 1.08, 13);
       }
     }
