@@ -35,8 +35,8 @@ let windowXDiff = 0; // forskel mellem appens og vinduets opløsning
 let windowYDiff = 0; // ^
 let button =
 {
-  slideshowLeft: new Button("slideshowLeft", 140, RES_Y / 1.8, 280, 960, ["mainMenu"]),
-  slideshowRight: new Button("slideshowRight", RES_X - 140, RES_Y / 1.8, 280, 960, ["mainMenu"])
+  slideshowLeft: new Button("slideshowLeft", "<", 140, RES_Y / 1.8, 280, 960, ["mainMenu"]),
+  slideshowRight: new Button("slideshowRight", ">", RES_X - 140, RES_Y / 1.8, 280, 960, ["mainMenu"])
 }; // button objekter
 let slideshow = {};
 let currentSlideshowImage = 0;
@@ -45,6 +45,7 @@ let activeWindow = // objekt der indikerer hvilke vinduer er aktive og kan inter
 {
   mainMenu: true
 }
+let color = [0,255];
 
 function setup()
 {
@@ -85,13 +86,13 @@ function setup()
   g = createGraphics(RES_X, RES_Y);
   slideshow =
   [
-    new SlideshowImage("faldskærm"),
-    new SlideshowImage("flyver"),
-    new SlideshowImage("kajak"),
+    new SlideshowImage("faldskærmsudspring"),
+    new SlideshowImage("flyvning"),
+    new SlideshowImage("roning"),
     new SlideshowImage("løb"),
-    new SlideshowImage("mountainbike"),
+    new SlideshowImage("mountainbiking"),
     new SlideshowImage("sejlbåd"),
-    new SlideshowImage("vandre")
+    new SlideshowImage("vandring")
   ];
 }
 
@@ -112,6 +113,18 @@ function draw()
   {
     button["slideshowLeft"].draw();
     button["slideshowRight"].draw();
+    g.noStroke();
+    for (let i = 0; i < slideshow.length; i++)
+    {
+      g.fill(color[1]);
+      g.circle(RES_X / 2 - 3.5 * 45 + i * 45, RES_Y / 1.08, 20);
+      if (i == currentSlideshowImage)
+      {
+        g.fill(color[0] + abs(slideshowImageOffset / (RES_X / 0.75)) * (color[1] - color[0]));
+        g.circle(RES_X / 2 - 3.5 * 45 + i * 45, RES_Y / 1.08, 13);
+      }
+    }
+
   }
 
 

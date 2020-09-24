@@ -11,12 +11,12 @@ function preload()
 
   backgroundImages =
   {
-    faldskærm: loadImage("assets/backgrounds/faldskærm.jpg"),
-    flyver: loadImage("assets/backgrounds/flyver.jpg"),
-    vandre: loadImage("assets/backgrounds/vandre.jpg"),
+    faldskærmsudspring: loadImage("assets/backgrounds/faldskærm.jpg"),
+    flyvning: loadImage("assets/backgrounds/flyver.jpg"),
+    vandring: loadImage("assets/backgrounds/vandre.jpg"),
     løb: loadImage("assets/backgrounds/løb.jpg"),
-    mountainbike: loadImage("assets/backgrounds/mountainbike.jpg"),
+    mountainbiking: loadImage("assets/backgrounds/mountainbike.jpg"),
     sejlbåd: loadImage("assets/backgrounds/sejlbåd.jpg"),
-    kajak: loadImage("assets/backgrounds/kajak.png")
+    roning: loadImage("assets/backgrounds/kajak.png")
   }
 }

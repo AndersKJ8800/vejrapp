@@ -1,6 +1,7 @@
 let noOfSlideshowImages = 0;
 let slideshowImageOffset = 0;
 let slideshowScrollingDirection = 1;
+let slideshowButtonText = [];
 
 class SlideshowImage
 {
@@ -10,11 +11,8 @@ class SlideshowImage
     noOfSlideshowImages++;
     this.image = backgroundImages[activityType];
     this.activityType = activityType;
-    button["slideshowImage" + this.activityType] = new Button("start" + activityType, RES_X / 2, RES_Y / 1.25, 200, 120, "mainMenu");
-  }
-  update()
-  {
-
+    textSize(56);
+    button["slideshowImage" + this.activityType] = new Button("start" + activityType, this.activityType, RES_X / 2, RES_Y / 1.25, textWidth(this.activityType) + 70, 120, ["mainMenu"]);
   }
   draw()
   {

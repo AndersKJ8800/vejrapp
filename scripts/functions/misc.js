@@ -77,8 +77,7 @@ function mousePressed()
 {
   let y = round((mouseY - (windowYDiff / 2)) / scaling);
   let x = round((mouseX - (windowXDiff / 2)) / scaling);
-  let buttons = Object.values(button);
-  for (let i = 0; i < buttons.length; i++)
+  let buttons = Object.values(button);for (let i = 0; i < buttons.length; i++)
   {
     if (x >= buttons[i].x && x <= buttons[i].x + buttons[i].width)
     {
