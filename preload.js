@@ -1,5 +1,6 @@
 let weatherIcons = {}; // defineres som objekt
 let backgroundImages = {};
+let miscIcons = {};
 
 function preload()
 {
@@ -16,7 +17,12 @@ function preload()
     vandring: loadImage("assets/backgrounds/vandre.jpg"),
     løb: loadImage("assets/backgrounds/løb.jpg"),
     mountainbiking: loadImage("assets/backgrounds/mountainbike.jpg"),
-    sejlbåd: loadImage("assets/backgrounds/sejlbåd.jpg"),
+    sejlads: loadImage("assets/backgrounds/sejlads.jpg"),
     roning: loadImage("assets/backgrounds/kajak.png")
+  }
+
+  miscIcons =
+  {
+    windDirection: loadImage("assets/icons/winddir.png")
   }
 }

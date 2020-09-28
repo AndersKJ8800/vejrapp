@@ -73,24 +73,37 @@ function calculateAverages()
   }
 }
 
-function mousePressed()
+function mousePressed(event)
 {
-  let y = round((mouseY - (windowYDiff / 2)) / scaling);
-  let x = round((mouseX - (windowXDiff / 2)) / scaling);
-  let buttons = Object.values(button);for (let i = 0; i < buttons.length; i++)
+  switch(event.button)
   {
-    if (x >= buttons[i].x && x <= buttons[i].x + buttons[i].width)
-    {
-      if (y >= buttons[i].y && y <= buttons[i].y + buttons[i].height)
+    case 0:
+      let y = round((mouseY - (windowYDiff / 2)) / scaling);
+      let x = round((mouseX - (windowXDiff / 2)) / scaling);
+      let buttons = Object.values(button);
+      for (let i = 0; i < buttons.length; i++)
       {
-        for (let j = 0; j < buttons[i].activeWindow.length; j++)
+        if (x >= buttons[i].x + buttons[i].xOffset && x <= buttons[i].x + buttons[i].width + buttons[i].xOffset)
         {
-          if (activeWindow[buttons[i].activeWindow[j]])
+          if (y >= buttons[i].y + buttons[i].yOffset && y <= buttons[i].y + buttons[i].height + buttons[i].yOffset)
           {
-            buttons[i].update();
+            for (let j = 0; j < buttons[i].activeWindow.length; j++)
+            {
+              if (activeWindow[buttons[i].activeWindow[j]])
+              {
+                buttons[i].update();
+              }
+            }
           }
         }
       }
-    }
+      break;
+    case 2:
+      activeWindow.weatherGraphs = false;
+      break;
   }
+}
+
+document.oncontextmenu = function() {
+    return false;
 }

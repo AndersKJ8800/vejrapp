@@ -35,17 +35,19 @@ let windowXDiff = 0; // forskel mellem appens og vinduets opløsning
 let windowYDiff = 0; // ^
 let button =
 {
-  slideshowLeft: new Button("slideshowLeft", "<", 140, RES_Y / 1.8, 280, 960, ["mainMenu"]),
-  slideshowRight: new Button("slideshowRight", ">", RES_X - 140, RES_Y / 1.8, 280, 960, ["mainMenu"])
+  slideshowLeft: new Button("slideshowLeft", "<", 106, RES_Y / 1.8, 212, 960, ["mainMenu"]),
+  slideshowRight: new Button("slideshowRight", ">", RES_X - 106, RES_Y / 1.8, 212, 960, ["mainMenu"])
 }; // button objekter
 let slideshow = {};
 let currentSlideshowImage = 0;
 let g; // grafik buffer hvor alt tegnes som tegnes til sidst i et frame
 let activeWindow = // objekt der indikerer hvilke vinduer er aktive og kan interageres med
 {
-  mainMenu: true
+  mainMenu: true,
+  weatherGraphs: false
 }
-let color = [0,255];
+let color = [0,255,null];
+color[2] = (color[0] + color[1]) / 2;
 
 function setup()
 {
@@ -80,6 +82,7 @@ function setup()
       windDirection: [null, null, null, [null, null, null]]
     }
   }
+  angleMode(DEGREES);
   updateLocation(weatherLocation);
   createCanvas(1,1);
   windowResized();
@@ -91,7 +94,7 @@ function setup()
     new SlideshowImage("roning"),
     new SlideshowImage("løb"),
     new SlideshowImage("mountainbiking"),
-    new SlideshowImage("sejlbåd"),
+    new SlideshowImage("sejlads"),
     new SlideshowImage("vandring")
   ];
 }
@@ -117,11 +120,11 @@ function draw()
     for (let i = 0; i < slideshow.length; i++)
     {
       g.fill(color[1]);
-      g.circle(RES_X / 2 - 3.5 * 45 + i * 45, RES_Y / 1.08, 20);
+      g.circle(RES_X / 2 - 3 * 45 + i * 45, RES_Y / 1.08, 20);
       if (i == currentSlideshowImage)
       {
         g.fill(color[0] + abs(slideshowImageOffset / (RES_X / 0.85)) * (color[1] - color[0]));
-        g.circle(RES_X / 2 - 3.5 * 45 + i * 45, RES_Y / 1.08, 13);
+        g.circle(RES_X / 2 - 3 * 45 + i * 45, RES_Y / 1.08, 13);
       }
     }
 

@@ -5,6 +5,8 @@ class Button
     this.type = type;
     this.x = x - width / 2;
     this.y = y - height / 2;
+    this.xOffset = 0;
+    this.yOffset = 0;
     this.width = width;
     this.height = height;
     this.activeWindow = activeWindow;
@@ -23,6 +25,7 @@ class Button
     }
     if (this.type.includes("start"))
     {
+      activeWindow.weatherGraphs = true;
       // sæt scene til whatever aktivitet
       switch(this.type.substring(5))
       {
@@ -51,6 +54,7 @@ class Button
     g.textSize(96);
     g.textFont("sans-serif");
     g.textAlign(CENTER, CENTER);
+    g.translate(this.xOffset, this.yOffset);
     switch(this.type)
     {
       case "slideshowLeft":
@@ -71,5 +75,6 @@ class Button
         g.textSize(56);
         g.text(this.text, this.x + this.width / 2, this.y + this.height / 2);
     }
+    g.translate(-this.xOffset, -this.yOffset);
   }
 }
