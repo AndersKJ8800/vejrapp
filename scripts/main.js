@@ -44,7 +44,7 @@ let g; // grafik buffer hvor alt tegnes som tegnes til sidst i et frame
 let activeWindow = // objekt der indikerer hvilke vinduer er aktive og kan interageres med
 {
   mainMenu: true,
-  weatherGraphs: false
+  weatherGraphs: true // ændre til false
 }
 let color = [0,255,null,null];
 color[2] = (color[0] + color[1]) / 2;
