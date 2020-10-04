@@ -34,7 +34,7 @@ function fetchOpenWeather()
 
 function fetchAerisWeather()
 {
-  fetch("https://api.aerisapi.com/forecasts/" + weatherCoords[0] + "," + weatherCoords[1] + "?filter=1hr&limit=130&fields=periods.dateTimeISO,periods.maxTempF,periods.maxTempC,periods.pop,periods.precipIN,periods.precipMM,periods.humidity,periods.sky,periods.solradWM2,periods.dewpointF,periods.dewpointC,periods.windDir,periods.windSpeedMaxMPH,periods.windSpeedMaxKPH,periods.weather&client_id=icumD3dUbzEppxotPXTS9&client_secret=49FYaCwyl2LfRp4VME4BXDG0Y8aQNkO8JMvsqvag")
+  fetch("https://api.aerisapi.com/forecasts/" + weatherCoords[0] + "," + weatherCoords[1] + "?filter=1hr&limit=130&fields=periods.dateTimeISO,periods.maxTempF,periods.maxTempC,periods.pop,periods.precipIN,periods.precipMM,periods.humidity,periods.sky,periods.solradWM2,periods.dewpointF,periods.dewpointC,periods.windDir,periods.windSpeedMaxMPH,periods.windSpeedMaxKPH,periods.weather&client_id=BKL8xbGmi9M83UvxP8Oyx&client_secret=q50Je6KF0dkdzBsPhHhT73FJmro5SYOtiHrJff3D")
   .then(response => response.json())
   .then(json => importJson.aerisWeather = json)
   .then(json => parseAerisWeather());
