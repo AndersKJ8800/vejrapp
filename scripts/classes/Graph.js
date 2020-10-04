@@ -30,6 +30,7 @@ class Graph
     }
     minGraphTemp = round(minGraphTemp / 5 - 0.5) * 5;
     maxGraphTemp = round(maxGraphTemp / 5 + 0.5) * 5;
+    let tickSpacing = (this.mainHeight - 100) / ((maxGraphTemp - minGraphTemp) / 5);
     // temperatur graf // to do y akse skalering og placering
     this.g48h.fill(255,191,191);
     this.g48h.noStroke();
@@ -38,11 +39,17 @@ class Graph
     // polygon
     for (let i = 0; i < data.next48Hours.length; i++)
     {
-      this.g48h.vertex(i * ((this.width - 200) / (data.next48Hours.length - 1)), -data.next48Hours[i].temperature[3][0] * 20 + 400);
+      this.g48h.vertex(
+        i * ((this.width - 200) / (data.next48Hours.length - 1)),
+        (maxGraphTemp - data.next48Hours[i].temperature[3][0]) * (tickSpacing / 5)
+      );
     }
     for (let i = data.next48Hours.length - 1; i >= 0 ; i--)
     {
-      this.g48h.vertex(i * ((this.width - 200) / (data.next48Hours.length - 1)), -data.next48Hours[i].temperature[3][2] * 20 + 400);
+      this.g48h.vertex(
+        i * ((this.width - 200) / (data.next48Hours.length - 1)),
+        (maxGraphTemp - data.next48Hours[i].temperature[3][2]) * (tickSpacing / 5)
+      );
     }
     this.g48h.endShape();
     this.g48h.stroke(255,63,63);
@@ -52,22 +59,28 @@ class Graph
     {
       this.g48h.line(
         0,
-        -data.next48Hours[i].temperature[3][1] * 20 + 400,
+        (maxGraphTemp - data.next48Hours[i].temperature[3][1]) * (tickSpacing / 5),
         (this.width - 200) / (data.next48Hours.length - 1),
-        -data.next48Hours[i+1].temperature[3][1] * 20 + 400
+        (maxGraphTemp - data.next48Hours[i+1].temperature[3][1]) * (tickSpacing / 5)
       );
       this.g48h.translate((this.width - 200) / (data.next48Hours.length - 1), 0);
     }
     this.g48h.translate(-100 - (this.width - 200), -50);
     // box
-    this.g48h.noFill();
     this.g48h.stroke(color[3]);
+    this.g48h.noFill();
     this.g48h.strokeWeight(5);
     this.g48h.rect(100, 50, this.width - 200, this.mainHeight - 100);
     // tick marks
-    let tickSpacing = (this.mainHeight - 100) / ((maxGraphTemp - minGraphTemp) / 5);
     for (let i = 0; i < (maxGraphTemp - minGraphTemp) / 5; i++)
     {
+      // linje
+      this.g48h.strokeWeight(3);
+      this.g48h.stroke(color[3], 127);
+      this.g48h.line(100, 50 + i * tickSpacing, this.width - 100, 50 + i * tickSpacing);
+      // tick
+      this.g48h.strokeWeight(5);
+      this.g48h.stroke(color[3]);
       this.g48h.line(100, 50 + i * tickSpacing, 115, 50 + i * tickSpacing);
     }
     // tick mark units
