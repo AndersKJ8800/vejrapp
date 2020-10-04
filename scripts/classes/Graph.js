@@ -15,6 +15,8 @@ class Graph
   makeGraph()
   {
     this.graphIsMade = true;
+    this.g48h.push();
+    this.g48h.background(color[1]);
     let maxGraphTemp = 0;
     let minGraphTemp = 9999;
     for (let i = 0; i < data.next48Hours.length; i++)
@@ -55,17 +57,20 @@ class Graph
     this.g48h.stroke(255,63,63);
     this.g48h.strokeWeight(4);
     // linje
+    this.g48h.beginShape(LINES)
     for (let i = 0; i < data.next48Hours.length - 1; i++)
     {
-      this.g48h.line(
-        0,
-        (maxGraphTemp - data.next48Hours[i].temperature[3][1]) * (tickSpacing / 5),
-        (this.width - 200) / (data.next48Hours.length - 1),
+      this.g48h.vertex(
+        (this.width - 200) / (data.next48Hours.length - 1) * i,
+        (maxGraphTemp - data.next48Hours[i].temperature[3][1]) * (tickSpacing / 5)
+      );
+      this.g48h.vertex(
+        (this.width - 200) / (data.next48Hours.length - 1) * (i + 1),
         (maxGraphTemp - data.next48Hours[i+1].temperature[3][1]) * (tickSpacing / 5)
       );
-      this.g48h.translate((this.width - 200) / (data.next48Hours.length - 1), 0);
     }
-    this.g48h.translate(-100 - (this.width - 200), -50);
+    this.g48h.endShape();
+    this.g48h.translate(-100, -50);
     // box
     this.g48h.stroke(color[3]);
     this.g48h.noFill();
@@ -108,13 +113,28 @@ class Graph
     // do tacks
 
 
-
+    this.g48h.pop();
   }
   draw(yOffset)
   {
+    if (parsedData == 4)
+    {
+      if (!this.graphIsMade)
+      {
+        this.makeGraph();
+      }
+    }
+    else
+    {
+      this.graphIsMade = false;
+    }
+
     if (parsedData == 4 && !this.graphIsMade)
     {
-      this.makeGraph();
+    }
+    else
+    {
+
     }
 
     return(this.g48h)

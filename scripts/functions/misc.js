@@ -40,10 +40,12 @@ function calculateAverages()
     for (let i = 0; i < 7; i++)
     {
       data.now[dataElements[i]][3][0] = Math.min(data.now[dataElements[i]][0], data.now[dataElements[i]][1], data.now[dataElements[i]][2]);
+      data.now[dataElements[i]][3][1] = 0;
       data.now[dataElements[i]][3][2] = Math.max(data.now[dataElements[i]][0], data.now[dataElements[i]][1], data.now[dataElements[i]][2]);
       for (let j = 0; j < 48; j++)
       {
         data.next48Hours[j][dataElements[i]][3][0] = Math.min(data.next48Hours[j][dataElements[i]][0], data.next48Hours[j][dataElements[i]][1], data.next48Hours[j][dataElements[i]][2]);
+        data.next48Hours[j][dataElements[i]][3][1] = 0;
         data.next48Hours[j][dataElements[i]][3][2] = Math.max(data.next48Hours[j][dataElements[i]][0], data.next48Hours[j][dataElements[i]][1], data.next48Hours[j][dataElements[i]][2]);
       }
       if (dataElements[i] != "pressure")
@@ -51,6 +53,7 @@ function calculateAverages()
         for (let j = 0; j < 21; j++)
         {
           data.next5Days[j][dataElements[i]][3][0] = Math.min(data.next5Days[j][dataElements[i]][0], data.next5Days[j][dataElements[i]][1], data.next5Days[j][dataElements[i]][2]);
+          data.next5Days[j][dataElements[i]][3][1] = 0;
           data.next5Days[j][dataElements[i]][3][2] = Math.max(data.next5Days[j][dataElements[i]][0], data.next5Days[j][dataElements[i]][1], data.next5Days[j][dataElements[i]][2]);
         }
       }
