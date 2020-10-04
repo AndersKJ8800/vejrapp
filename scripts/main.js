@@ -46,8 +46,9 @@ let activeWindow = // objekt der indikerer hvilke vinduer er aktive og kan inter
   mainMenu: true,
   weatherGraphs: false
 }
-let color = [0,255,null];
+let color = [0,255,null,null];
 color[2] = (color[0] + color[1]) / 2;
+color[3] = (color[2] + color[1]) / 2;
 
 function setup()
 {

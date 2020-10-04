@@ -4,6 +4,16 @@ let slideshowImageOffsetTime = 1000;
 let initialOffset = 0;
 let slideshowScrollingDirection = 1;
 let slideshowButtonText = [];
+let weatherFeatures = // vis subgraf (bool), vis vindretning (bool), tabeller som skal vises i rækkefølge (array)
+{
+  faldskærmsudspring: [true, true, ["skydække"]],
+  flyvning: [true, true, ["lufttryk", "skydække"]],
+  roning: [true, false, ["skydække"]],
+  løb: [true, false, ["skydække", "luftfugtighed"]],
+  mountainbiking: [false, null, ["skydække", "luftfugtighed"]],
+  sejlads: [true, true, ["skydække"]],
+  vandring: [true, false, ["skydække", "luftfugtighed"]]
+}
 
 class SlideshowImage
 {
@@ -15,7 +25,7 @@ class SlideshowImage
     this.activityType = activityType;
     textSize(56);
     button["slideshowImage" + this.activityType] = new Button("start" + activityType, this.activityType, RES_X / 2, RES_Y / 1.25, textWidth(this.activityType) + 70, 120, ["mainMenu"]);
-    this.weatherInfoBox = new WeatherInfoBox();
+    this.weatherInfoBox = new WeatherInfoBox(weatherFeatures[this.activityType]);
   }
   draw()
   {
@@ -44,8 +54,6 @@ class SlideshowImage
         button["slideshowImage" + this.activityType].yOffset += 30;
       }
     }
-
-
   }
 }
 
