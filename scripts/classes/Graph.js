@@ -100,15 +100,19 @@ class Graph
     {
       this.g.text(maxGraphTemp - i * 5 + "°",90,54 + i * tickSpacing);
     }
-    // tick marks (lodret)
+    // tick marks (lodret) og vejr-ikoner
     this.g.push();
     this.g.translate(100, 50);
     for (let i = 0; i < graphData.length; i++)
     {
       let hour = parseInt(graphData[i].time[0].substring(11, 13));
-      // timestamps
-      if (hour % 3 == 0)
+      if (hour % 6 == 0)
       {
+        // linje
+        this.g.strokeWeight(3);
+        this.g.stroke(color[3], 127);
+        this.g.line(0, 0, 0, this.mainHeight - 100);
+        // timestamps
         if (timePeriod == "next48Hours")
         {
           this.g.noStroke();
@@ -117,12 +121,16 @@ class Graph
           this.g.text(hour, 0, this.mainHeight - 91);
         }
       }
-      // linje
-      if (hour % 6 == 0)
+      // vejr-ikoner
+      if (hour % 3 == 0 && i < graphData.length && i > 0)
       {
-        this.g.strokeWeight(3);
-        this.g.stroke(color[3], 127);
-        this.g.line(0, 0, 0, this.mainHeight - 100);
+        this.g.scale(1/2, 1/2);
+        this.g.image(
+          weatherIcons[graphData[i].symbol_code[0]],
+          -50,
+          (maxGraphTemp - graphData[i].temperature[3][2]) * (tickSpacing / 5) * 2 - 130
+        );
+        this.g.scale(2, 2);
       }
       this.g.translate((this.width - 200) / (graphData.length - 1), 0);
     }
