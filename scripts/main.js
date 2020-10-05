@@ -1,4 +1,4 @@
-let weatherLocation = ("sydney"); // lokalitet som string
+let weatherLocation = ("viborg"); // lokalitet som string
 let weatherCoords = []; // lokalitet som koordinater
 let importJson =  // hentet data i json format
 {
