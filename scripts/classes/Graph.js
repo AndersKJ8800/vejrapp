@@ -16,6 +16,7 @@ class Graph
   makeGraph(timePeriod)
   {
     let graphData = data[timePeriod];
+    if (timePeriod == "next5Days") graphData.length = 20;
     this.g = createGraphics(this.width, this.mainHeight + this.subHeight);
     this.g.fill(color[1]);
     this.g.noStroke();
@@ -106,29 +107,40 @@ class Graph
     for (let i = 0; i < graphData.length; i++)
     {
       let hour = parseInt(graphData[i].time[0].substring(11, 13));
+      let day = parseInt(graphData[i].time[0].substring(8, 10));
+      let month = parseInt(graphData[i].time[0].substring(5, 7));
       if (hour % 6 == 0)
       {
         // linje
+        if (hour == 0) this.g.stroke(color[2], 180);
+        else this.g.stroke(color[3], 127);
         this.g.strokeWeight(3);
-        this.g.stroke(color[3], 127);
         this.g.line(0, 0, 0, this.mainHeight - 100);
         // timestamps
+        this.g.noStroke();
+        this.g.fill(color[3]);
         if (timePeriod == "next48Hours")
         {
-          this.g.noStroke();
-          this.g.fill(color[3]);
           this.g.textAlign(CENTER, TOP);
           this.g.text(hour, 0, this.mainHeight - 91);
         }
+        else
+        {
+          if (hour == 0)
+          {
+            this.g.textAlign(LEFT, TOP);
+            this.g.text(day + " / " + month, 0, this.mainHeight - 91);
+          }
+        }
       }
       // vejr-ikoner
-      if (hour % 3 == 0 && i < graphData.length && i > 0)
+      if (hour % 3 == 0 && i < graphData.length - 1 && i > 0)
       {
         this.g.scale(1/2, 1/2);
         this.g.image(
           weatherIcons[graphData[i].symbol_code[0]],
           -50,
-          (maxGraphTemp - graphData[i].temperature[3][2]) * (tickSpacing / 5) * 2 - 130
+          (maxGraphTemp - (graphData[i].temperature[3][2] + graphData[i].temperature[3][1]) / 2) * (tickSpacing / 5) * 2 - 130
         );
         this.g.scale(2, 2);
       }
@@ -178,6 +190,6 @@ class Graph
 
     }
 
-    return(this.g48h)
+    return(this.g5d)
   }
 }
