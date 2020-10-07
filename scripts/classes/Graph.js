@@ -8,11 +8,13 @@ class Graph
     this.g48h = this.g;
     this.g5d = this.g;
     this.graphIsMade = false;
+    this.graphDataLength = 0;
   }
   makeGraph(timePeriod)
   {
     let graphData = data[timePeriod];
     if (timePeriod == "next5Days") graphData.length = 20;
+    this.graphDataLength = graphData.length - 1;
     graphData.start = 0
     if (timePeriod == "next5Days") graphData.start = 1;
     this.g = createGraphics(this.width, this.height);
@@ -188,26 +190,16 @@ class Graph
     this.g.stroke(color[3]);
     this.g.noFill();
 
-
-
-
-
-    //this.g.rect(100, this.height, this.width - 200, this.subHeight - 50);
-
-    // do tacks
-
-    if (timePeriod == "next48Hours") this.g48h = this.g;
-    if (timePeriod == "next5Days") this.g5d = this.g;
-
+    return this.g;
   }
-  draw(yOffset)
+  draw()
   {
     if (parsedData == 4)
     {
       if (!this.graphIsMade)
       {
-        this.makeGraph("next48Hours");
-        this.makeGraph("next5Days");
+        this.g48h = this.makeGraph("next48Hours");
+        this.g5d = this.makeGraph("next5Days");
         this.graphIsMade = true;
       }
     }
@@ -216,6 +208,5 @@ class Graph
       this.graphIsMade = false;
     }
 
-    return(this.g48h);
   }
 }

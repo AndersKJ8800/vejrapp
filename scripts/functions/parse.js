@@ -142,7 +142,7 @@ function parseOpenWeather3Hours()
   let loopHour = round((hour()+3)/6)*6;
   let loopDay = day();
   let currentMonth = month();
-  for (let i = 0; i < 21; i++)
+  for (let i = 0; i < 20; i++)
   {
     for (let j = 0; j < importJson.openWeather3Hours.list.length; j++)
     {

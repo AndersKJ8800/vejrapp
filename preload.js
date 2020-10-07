@@ -23,6 +23,11 @@ function preload()
 
   miscIcons =
   {
-    windDirection: loadImage("assets/icons/winddir.png")
+    precipitation: loadImage("assets/icons/precipitation.png"),
+    humidity: loadImage("assets/icons/humidity.png"),
+    cloudCover: loadImage("assets/icons/cloudcover.png"),
+    windSpeed: loadImage("assets/icons/windspeed.png"),
+    windDirection: loadImage("assets/icons/winddir.png"),
+    pressure: loadImage("assets/icons/pressure.png")
   }
 }
