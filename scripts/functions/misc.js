@@ -50,7 +50,7 @@ function calculateAverages()
       }
       if (dataElements[i] != "pressure")
       {
-        for (let j = 0; j < 21; j++)
+        for (let j = 1; j < 20; j++)
         {
           data.next5Days[j][dataElements[i]][3][0] = Math.min(data.next5Days[j][dataElements[i]][0], data.next5Days[j][dataElements[i]][1], data.next5Days[j][dataElements[i]][2]);
           data.next5Days[j][dataElements[i]][3][1] = 0;
@@ -66,7 +66,7 @@ function calculateAverages()
         }
         if (dataElements[i] != "pressure")
         {
-          for (let k = 0; k < 21; k++)
+          for (let k = 0; k < 20; k++)
           {
             data.next5Days[k][dataElements[i]][3][1] += data.next5Days[k][dataElements[i]][j] / 3;
           }

@@ -49,7 +49,7 @@ function parseYrWeather()
     let loopHour = round((hour()+3)/6)*6;
     let loopDay = currentDay;
     let currentMonth = month();
-    for (let i = 0; i < 21; i++)
+    for (let i = 0; i < 20; i++)
     {
       for (let j = 0; j < importJson.yr.properties.timeseries.length; j++)
       {

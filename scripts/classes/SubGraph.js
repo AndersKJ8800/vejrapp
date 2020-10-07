@@ -1,4 +1,4 @@
-class TablesGraph
+class SubGraph
 {
   constructor(width, height)
   {
