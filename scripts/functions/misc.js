@@ -25,6 +25,8 @@ function updateLocation(newLocation)
   updateWeatherCoords();
   setTimeout(function()
   {
+    weatherCoords = [round(importJson.google.results[0].geometry.location.lat, 4), round(importJson.google.results[0].geometry.location.lng, 4)];
+    formattedWeatherLocation = importJson.google.results[0].address_components[0].short_name + ", " + importJson.google.results[0].address_components[1].short_name;
     fetchYrWeather();
     fetchOpenWeather();
     fetchAerisWeather();

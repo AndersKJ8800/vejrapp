@@ -1,16 +1,17 @@
 let weatherLocation = ("viborg"); // lokalitet som string
+let formattedWeatherLocation;
 let weatherCoords = []; // lokalitet som koordinater
 let importJson =  // hentet data i json format
 {
+  google: null,
   yr: null, // fra yr
   openWeather1Hour: null, // fra openweather (1/48 timer)
   openWeather3Hours: null, // fra openwather (3/120 timer)
   aerisWeather: null, // fra aerisweather (1/120 timer)
 }
 let dataElements = ["temperature", "pressure", "cloudCover", "precipitation", "humidity", "windSpeed", "windDirection"];
-let data = // fortolket data fra json, hvert variabel er et array med forskellige kilder; [0]: yr, [1]: openweather, [2]: weatherbit, [3]: beregnet gennemsnit.
+let data = // fortolket data fra json, hvert variabel er et array med forskellige kilder; [0]: yr, [1]: openweather, [2]: aerisweather, [3]: beregnet gennemsnit.
 {
-  location: weatherLocation, // lokalitet for vejret
   now: // vejret som det er lige nu.
   {
     isDay: null, // dag eller nat, bool

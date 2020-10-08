@@ -193,7 +193,7 @@ function parseAerisWeather()
   data.now.humidity[2] = importJson.aerisWeather.response[0].periods[0].humidity;
   data.now.precipitation[2] = importJson.aerisWeather.response[0].periods[0].precipMM;
   data.now.windSpeed[2] = importJson.aerisWeather.response[0].periods[0].windSpeedMaxKPH;
-  data.now.windDirection[2] = importJson.aerisWeather.response[0].periods[0].windDir;
+  data.now.windDirection[2] = convertDirectionToAngle(importJson.aerisWeather.response[0].periods[0].windDir);
   // næste to døgn
   for (let i = 0; i < 48; i++)
   {
@@ -204,7 +204,7 @@ function parseAerisWeather()
     data.next48Hours[i].humidity[2] = importJson.aerisWeather.response[0].periods[i].humidity;
     data.next48Hours[i].precipitation[2] = importJson.aerisWeather.response[0].periods[i].precipMM;
     data.next48Hours[i].windSpeed[2] = importJson.aerisWeather.response[0].periods[i].windSpeedMaxKPH;
-    data.next48Hours[i].windDirection[2] = importJson.aerisWeather.response[0].periods[i].windDir;
+    data.next48Hours[i].windDirection[2] = convertDirectionToAngle(importJson.aerisWeather.response[0].periods[i].windDir);
   }
   // næste 5 døgn
   {
@@ -227,7 +227,7 @@ function parseAerisWeather()
           data.next5Days[i].humidity[2] = importJson.aerisWeather.response[0].periods[j].humidity;
           data.next5Days[i].precipitation[2] = importJson.aerisWeather.response[0].periods[j].precipMM; // to-do; tager kun nedbør den kommende time i stedet for 6 timer
           data.next5Days[i].windSpeed[2] = importJson.aerisWeather.response[0].periods[j].windSpeedMaxKPH;
-          data.next5Days[i].windDirection[2] = importJson.aerisWeather.response[0].periods[j].windDir;
+          data.next5Days[i].windDirection[2] = convertDirectionToAngle(importJson.aerisWeather.response[0].periods[j].windDir);
           break
         }
       }
@@ -471,4 +471,61 @@ function convertSymbolCode(string, isDay)
 
   return symbolCode;
 
+}
+
+function convertDirectionToAngle(dir)
+{
+  let angle = 0;
+  switch(dir)
+  {
+    case "N":
+      angle = 0;
+      break;
+    case "NNE":
+      angle = 22.5;
+      break;
+    case "NE":
+      angle = 45;
+      break;
+    case "ENE":
+      angle = 67.5;
+      break;
+    case "E":
+      angle = 90;
+      break;
+    case "ESE":
+      angle = 112.5;
+      break;
+    case "SE":
+      angle = 135;
+      break;
+    case "SSE":
+      angle = 157.5;
+      break;
+    case "S":
+      angle = 180;
+      break;
+    case "SSW":
+      angle = 202.5;
+      break;
+    case "SW":
+      angle = 225;
+      break;
+    case "WSW":
+      angle = 247.5;
+      break;
+    case "W":
+      angle = 270;
+      break;
+    case "WNW":
+      angle = 292.5;
+      break;
+    case "NW":
+      angle = 315;
+      break;
+    case "NNW":
+      angle = 337.5;
+      break;
+  }
+  return angle;
 }

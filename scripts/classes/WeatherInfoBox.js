@@ -73,9 +73,10 @@ class WeatherInfoBox
     {
       this.dW.push();
       this.updateHighlight(dataSet, 42069);
-      this.dW.text(this.dW.timeAndDate, 0, 200);
+      this.dW.text(this.dW.timeAndDate, 0, 210);
+      this.dW.text(formattedWeatherLocation, 0, 70)
       this.dW.textSize(100);
-      this.dW.text(" " + round(dataSet.temperature[3][1]) + "°", 0, 110);
+      this.dW.text(round(dataSet.temperature[3][1]) + "°", 10, 110);
       this.dW.textAlign(LEFT, TOP);
       this.dW.textSize(50);
       let mm = round(dataSet.precipitation[3][1], 1).toString();
@@ -106,7 +107,13 @@ class WeatherInfoBox
       if (this.showWindDirection)
       {
         this.dW.translate(0, spacing);
-        this.dW.image(miscIcons.windDirection, -55, 0);
+        this.dW.push();
+        this.dW.translate(-32,22.5);
+        this.dW.angleMode(DEGREES);
+        this.dW.rotate(round(dataSet.windDirection[3][1]));
+        this.dW.imageMode(CENTER);
+        this.dW.image(miscIcons.windDirection, 0, 0);
+        this.dW.pop();
         this.dW.text(round(dataSet.windDirection[3][1]) + "°", 0, 0);
       }
 
