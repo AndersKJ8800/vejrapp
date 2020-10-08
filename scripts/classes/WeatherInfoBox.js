@@ -1,4 +1,3 @@
-let fuck = true;
 class WeatherInfoBox
 {
   constructor(array)
@@ -29,7 +28,7 @@ class WeatherInfoBox
       g.translate(RES_X / 3.2, RES_Y + yOffset * 1.135);
       g.rectMode(CORNERS);
       let l = 0;
-      if (currentDataSet == "next48Hours") l = 47;
+      if (currentDataSet == "next48Hours") l = 45;
       else l = 18;
       mouseOverDataN = round(((mouseX - (windowXDiff / 2)) / scaling - 700) / 905 * l + 0.5);
       if (mouseOverDataN <= 0 || mouseOverDataN > l) mouseOverDataN = false;
@@ -47,9 +46,14 @@ class WeatherInfoBox
       g.pop();
     }
     this.uW.graph.draw();
-    if (currentDataSet == "next48Hours") g.image(this.uW.graph.g48h, RES_X / 3.2, RES_Y + yOffset * 1.135);
-    else g.image(this.uW.graph.g5d, RES_X / 3.2, RES_Y + yOffset * 1.135);
-
+    this.uW.subGraph.draw();
+    if (parsedData == 4)
+    {
+      if (currentDataSet == "next48Hours") g.image(this.uW.graph.g48h, RES_X / 3.2, RES_Y + yOffset * 1.135);
+      else g.image(this.uW.graph.g5d, RES_X / 3.2, RES_Y + yOffset * 1.135);
+      if (currentDataSet == "next48Hours") g.image(this.uW.subGraph.g48h, RES_X / 3.2, this.height);
+      else g.image(this.uW.subGraph.g5d, RES_X / 3.2, RES_Y + yOffset * 1.135);
+    }
 
     this.dW.fill(color[1]);
     this.dW.noStroke();

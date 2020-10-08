@@ -14,18 +14,19 @@ class Graph
   {
     let graphData = data[timePeriod];
     if (timePeriod == "next5Days") graphData.length = 19;
-    this.graphDataLength = graphData.length - 1;
-    graphData.start = 0
+    if (timePeriod == "next48Hours") graphData.length = 46;
+    graphData.start = 0;
     if (timePeriod == "next5Days") graphData.start = 1;
+    if (timePeriod == "next48Hours") graphData.length = 46;
     this.g = createGraphics(this.width, this.height);
     let maxGraphPrecip = 8;
     let maxGraphTemp = -9999;
     let minGraphTemp = 9999;
     for (let i = graphData.start; i < graphData.length; i++)
     {
-      if (maxGraphPrecip < graphData[i].precipitation[2])
+      if (maxGraphPrecip < graphData[i].precipitation[3][2])
       {
-        maxGraphPrecip = graphData[i].precipitation[2];
+        maxGraphPrecip = graphData[i].precipitation[3][2];
       }
       if (maxGraphTemp < graphData[i].temperature[3][2])
       {

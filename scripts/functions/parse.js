@@ -31,7 +31,7 @@ function parseYrWeather()
   data.now.windSpeed[0] = currentTimeseries.data.instant.details.wind_speed;
   data.now.windDirection[0] = currentTimeseries.data.instant.details.wind_from_direction;
   // anviser data til næste 48 timer
-  for (let i = 0; i < 48; i++)
+  for (let i = 0; i < 46; i++)
   {
     data.next48Hours[i].isDay = isDay(importJson.yr.properties.timeseries[i + currentTimeseriesNo].data.next_1_hours.summary.symbol_code);
     data.next48Hours[i].time[0] = importJson.yr.properties.timeseries[i + currentTimeseriesNo].time;
@@ -111,7 +111,7 @@ function parseOpenWeather1Hour()
   }
   // anviser data til vejret 48 timer frem
   {
-    for (let i = 0; i < 48; i++)
+    for (let i = 0; i < 46; i++)
     {
       data.next48Hours[i].time[1] = importJson.openWeather1Hour.hourly[i].dt;
       data.next48Hours[i].symbol_code[1] = convertSymbolCode(importJson.openWeather1Hour.hourly[i].weather[0].description, data.next48Hours[i].isDay);
@@ -192,10 +192,10 @@ function parseAerisWeather()
   data.now.cloudCover[2] = importJson.aerisWeather.response[0].periods[0].sky;
   data.now.humidity[2] = importJson.aerisWeather.response[0].periods[0].humidity;
   data.now.precipitation[2] = importJson.aerisWeather.response[0].periods[0].precipMM;
-  data.now.windSpeed[2] = importJson.aerisWeather.response[0].periods[0].windSpeedMaxKPH;
+  data.now.windSpeed[2] = kphToMps(importJson.aerisWeather.response[0].periods[0].windSpeedMaxKPH);
   data.now.windDirection[2] = convertDirectionToAngle(importJson.aerisWeather.response[0].periods[0].windDir);
   // næste to døgn
-  for (let i = 0; i < 48; i++)
+  for (let i = 0; i < 46; i++)
   {
     data.next48Hours[i].time[2] = importJson.aerisWeather.response[0].periods[i].dateTimeISO;
     data.next48Hours[i].symbol_code[2] = convertSymbolCode(importJson.aerisWeather.response[0].periods[i].weather, data.next48Hours[i].isDay);
@@ -203,7 +203,7 @@ function parseAerisWeather()
     data.next48Hours[i].cloudCover[2] = importJson.aerisWeather.response[0].periods[i].sky;
     data.next48Hours[i].humidity[2] = importJson.aerisWeather.response[0].periods[i].humidity;
     data.next48Hours[i].precipitation[2] = importJson.aerisWeather.response[0].periods[i].precipMM;
-    data.next48Hours[i].windSpeed[2] = importJson.aerisWeather.response[0].periods[i].windSpeedMaxKPH;
+    data.next48Hours[i].windSpeed[2] = kphToMps(importJson.aerisWeather.response[0].periods[i].windSpeedMaxKPH);
     data.next48Hours[i].windDirection[2] = convertDirectionToAngle(importJson.aerisWeather.response[0].periods[i].windDir);
   }
   // næste 5 døgn
@@ -226,7 +226,7 @@ function parseAerisWeather()
           data.next5Days[i].cloudCover[2] = importJson.aerisWeather.response[0].periods[j].sky;
           data.next5Days[i].humidity[2] = importJson.aerisWeather.response[0].periods[j].humidity;
           data.next5Days[i].precipitation[2] = importJson.aerisWeather.response[0].periods[j].precipMM; // to-do; tager kun nedbør den kommende time i stedet for 6 timer
-          data.next5Days[i].windSpeed[2] = importJson.aerisWeather.response[0].periods[j].windSpeedMaxKPH;
+          data.next5Days[i].windSpeed[2] = kphToMps(importJson.aerisWeather.response[0].periods[j].windSpeedMaxKPH);
           data.next5Days[i].windDirection[2] = convertDirectionToAngle(importJson.aerisWeather.response[0].periods[j].windDir);
           break
         }
@@ -471,6 +471,11 @@ function convertSymbolCode(string, isDay)
 
   return symbolCode;
 
+}
+
+function kphToMps(kph)
+{
+  return kph / 3.6;
 }
 
 function convertDirectionToAngle(dir)
