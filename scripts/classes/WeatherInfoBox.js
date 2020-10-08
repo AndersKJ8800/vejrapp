@@ -30,7 +30,7 @@ class WeatherInfoBox
       g.rectMode(CORNERS);
       let l = 0;
       if (currentDataSet == "next48Hours") l = 47;
-      else l = 19;
+      else l = 18;
       mouseOverDataN = round(((mouseX - (windowXDiff / 2)) / scaling - 700) / 905 * l + 0.5);
       if (mouseOverDataN <= 0 || mouseOverDataN > l) mouseOverDataN = false;
       let y = (mouseY - (windowYDiff / 2)) / scaling;
@@ -67,7 +67,9 @@ class WeatherInfoBox
     }
     else
     {
-      dataSet = data[currentDataSet][mouseOverDataN - 1];
+      if (currentDataSet == "next48Hours") dataSet = data[currentDataSet][mouseOverDataN - 1];
+      else  dataSet = data[currentDataSet][mouseOverDataN];
+
     }
     if (parsedData == 4)
     {

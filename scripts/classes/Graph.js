@@ -13,7 +13,7 @@ class Graph
   makeGraph(timePeriod)
   {
     let graphData = data[timePeriod];
-    if (timePeriod == "next5Days") graphData.length = 20;
+    if (timePeriod == "next5Days") graphData.length = 19;
     this.graphDataLength = graphData.length - 1;
     graphData.start = 0
     if (timePeriod == "next5Days") graphData.start = 1;
