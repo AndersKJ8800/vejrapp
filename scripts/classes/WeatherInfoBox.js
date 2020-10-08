@@ -33,7 +33,7 @@ class WeatherInfoBox
       mouseOverDataN = round(((mouseX - (windowXDiff / 2)) / scaling - 700) / 905 * l + 0.5);
       if (mouseOverDataN <= 0 || mouseOverDataN > l) mouseOverDataN = false;
       let y = (mouseY - (windowYDiff / 2)) / scaling;
-      if (y < 260 || y > 582) mouseOverDataN = false;
+      if (y < 260 || y > 815) mouseOverDataN = false;
       if (mouseOverDataN !== false && parsedData == 4)
       {
         g.rect(
@@ -41,6 +41,12 @@ class WeatherInfoBox
           0,
           (mouseOverDataN / l) * (this.uW.graph.width - 200),
           this.uW.graph.height - 100
+        );
+        g.rect(
+          ((mouseOverDataN - 1) / l) * (this.uW.graph.width - 200),
+          403,
+          (mouseOverDataN / l) * (this.uW.graph.width - 200),
+          357 + this.uW.subGraph.height
         );
       }
       g.pop();

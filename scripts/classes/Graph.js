@@ -37,7 +37,7 @@ class Graph
         minGraphTemp = graphData[i].temperature[3][0] - 1;
       }
     }
-    maxGraphPrecip = round(maxGraphPrecip + 0.499);
+    maxGraphPrecip = round(maxGraphPrecip / 2 + 0.499) * 2;
     maxGraphTemp = round(maxGraphTemp / 5 + 0.499) * 5;
     minGraphTemp = round(minGraphTemp / 5 - 0.5) * 5;
     let tempTickSpacing = (this.height - 100) / ((maxGraphTemp - minGraphTemp) / 5);
