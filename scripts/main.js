@@ -135,33 +135,5 @@ function draw()
       }
     }
   }
-
   image(g,0,0);
-
-  /*{
-    let no = 0
-    strokeWeight(2);
-    for (let i = 0; i < data.next48Hours.length - 1; i++)
-    {
-      translate(50,0);
-      noStroke();
-      fill(255);
-      quad(
-        (i) * 35, data.next48Hours[i][dataElements[no]][3][0] * 20,
-        (i) * 35, data.next48Hours[i][dataElements[no]][3][2] * 20,
-        (i+1) * 35, data.next48Hours[i+1][dataElements[no]][3][2] * 20,
-        (i+1) * 35, data.next48Hours[i+1][dataElements[no]][3][0] * 20,
-      );
-      stroke(0);
-      line(i * 35, data.next48Hours[i][dataElements[no]][3][1] * 20, (i+1) * 35, data.next48Hours[i+1][dataElements[no]][3][1] * 20);
-      stroke(255,0,0);
-      line(i * 35, data.next48Hours[i][dataElements[no]][0] * 20, (i+1) * 35, data.next48Hours[i+1][dataElements[no]][0] * 20);
-      stroke(0,255,0);
-      line(i * 35, data.next48Hours[i][dataElements[no]][1] * 20, (i+1) * 35, data.next48Hours[i+1][dataElements[no]][1] * 20);
-      stroke(0,0,255);
-      line(i * 35, data.next48Hours[i][dataElements[no]][2] * 20, (i+1) * 35, data.next48Hours[i+1][dataElements[no]][2] * 20);
-
-      translate(-50,0);
-    }
-  }*/
 }

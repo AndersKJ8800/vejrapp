@@ -70,6 +70,7 @@ class SubGraph
     this.g.endShape();
     this.g.pop();
 
+    this.g.push();
     //tick marks (vandret)
     for (let i = graphData.start; i < maxGraphSpeed / 2; i++)
     {
@@ -93,21 +94,13 @@ class SubGraph
       this.g.textSize(16);
       this.g.text("m/s",90,52 + (i-1) * speedTickSpacing);
     }
-
-
-
+    this.g.pop();
 
     // box
     this.g.stroke(color[3]);
     this.g.noFill();
     this.g.strokeWeight(5);
     this.g.rect(100, 25, this.width - 200, this.height - 50);
-
-    //this.g.background(0,25); // delet
-
-
-
-
 
     return this.g;
   }

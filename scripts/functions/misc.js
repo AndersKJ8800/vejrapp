@@ -16,6 +16,7 @@ function windowResized()
 
 function updateLocation(newLocation)
 {
+  nullifyWeather();
   weatherLocation = newLocation;
   importJson.yr = null;
   importJson.openWeather1Hour = null;
@@ -118,6 +119,85 @@ function mousePressed(event)
   }
 }
 
+function keyPressed(event)
+{
+  switch (event.key)
+  {
+    case "Backspace":
+      formattedWeatherLocation = formattedWeatherLocation.slice(0,-1);
+      break;
+    case "Enter":
+      updateLocation(formattedWeatherLocation);
+      break;
+    case "Tab":
+      if (currentDataSet == "next48Hours") currentDataSet = "next5Days";
+      else currentDataSet = "next48Hours";
+  }
+  if (event.keyCode >= 65 && event.keyCode <= 90)
+  {
+    if (formattedWeatherLocation.length < 22) formattedWeatherLocation += event.key;
+  }
+
+
+
+}
+
+document.onkeydown = function (e) {
+        return false;
+}
+
 document.oncontextmenu = function() {
     return false;
+}
+
+function nullifyWeather()
+{
+  data = {
+    now:
+    {
+      isDay: null,
+      symbol_code: [null, null, null],
+      time: [null, null, null],
+      temperature: [null, null, null, [null, null, null]],
+      pressure: [null, null, null, [null, null, null]],
+      cloudCover: [null, null, null, [null, null, null]],
+      precipitation: [null, null, null, [null, null, null]],
+      humidity: [null, null, null, [null, null, null]],
+      windSpeed: [null, null, null, [null, null, null]],
+      windDirection: [null, null, null, [null, null, null]]
+    },
+    next48Hours: [],
+    next5Days: []
+  }
+  for (let i = 0; i < 48; i++)
+  {
+    data.next48Hours[i] =
+    {
+      isDay: null,
+      symbol_code: [null, null, null],
+      time: [null, null, null],
+      temperature: [null, null, null, [null, null, null]],
+      pressure: [null, null, null, [null, null, null]],
+      cloudCover: [null, null, null, [null, null, null]],
+      precipitation: [null, null, null, [null, null, null]],
+      humidity: [null, null, null, [null, null, null]],
+      windSpeed: [null, null, null, [null, null, null]],
+      windDirection: [null, null, null, [null, null, null]]
+    };
+  }
+  for (let i = 0; i < 21; i++)
+  {
+    data.next5Days[i] =
+    {
+      isDay: null,
+      symbol_code: [null, null, null],
+      time: [null, null, null],
+      temperature: [null, null, null, [null, null, null]],
+      cloudCover: [null, null, null, [null, null, null]],
+      precipitation: [null, null, null, [null, null, null]],
+      humidity: [null, null, null, [null, null, null]],
+      windSpeed: [null, null, null, [null, null, null]],
+      windDirection: [null, null, null, [null, null, null]]
+    }
+  }
 }

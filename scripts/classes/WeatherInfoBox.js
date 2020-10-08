@@ -57,8 +57,8 @@ class WeatherInfoBox
     {
       if (currentDataSet == "next48Hours") g.image(this.uW.graph.g48h, RES_X / 3.2, RES_Y + yOffset * 1.135);
       else g.image(this.uW.graph.g5d, RES_X / 3.2, RES_Y + yOffset * 1.135);
-      if (currentDataSet == "next48Hours") g.image(this.uW.subGraph.g48h, RES_X / 3.2, this.height);
-      else g.image(this.uW.subGraph.g5d, RES_X / 3.2, RES_Y + yOffset * 1.135);
+      if (currentDataSet == "next48Hours") g.image(this.uW.subGraph.g48h, RES_X / 3.2, RES_Y + yOffset * 1.135 + 429);
+      else g.image(this.uW.subGraph.g5d, RES_X / 3.2, RES_Y + yOffset * 1.135 + 429);
     }
 
     this.dW.fill(color[1]);
@@ -86,7 +86,7 @@ class WeatherInfoBox
       this.dW.push();
       this.updateHighlight(dataSet, 42069);
       this.dW.text(this.dW.timeAndDate, 0, 210);
-      this.dW.text(formattedWeatherLocation, 0, 70)
+      this.dW.text(formattedWeatherLocation, 0, 70);
       this.dW.textSize(100);
       this.dW.text(round(dataSet.temperature[3][1]) + "°", 10, 110);
       this.dW.textAlign(LEFT, TOP);

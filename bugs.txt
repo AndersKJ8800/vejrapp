@@ -1,2 +1,0 @@
-Første slideshow billede panerer ikke når man går til venstre.
-Knappen på det sidste slideshow billede forsvinder med det samme man går mod højre.

@@ -186,11 +186,6 @@ class Graph
     this.g.pop();
     this.g.image(gS,102,0);
 
-
-
-    this.g.stroke(color[3]);
-    this.g.noFill();
-
     return this.g;
   }
   draw()
