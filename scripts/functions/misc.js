@@ -73,6 +73,15 @@ function calculateAverages()
         }
       }
     }
+    data.now.pressure[3][0] = Math.min(data.now.pressure[0], data.now.pressure[1]);
+    data.now.pressure[3][1] = (data.now.pressure[0] + data.now.pressure[1]) / 2;
+    data.now.pressure[3][2] = Math.min(data.now.pressure[0], data.now.pressure[1]);
+    for (let i = 0; i < data.next48Hours.length; i++)
+    {
+      data.next48Hours[i].pressure[3][0] = Math.min(data.now.pressure[0], data.now.pressure[1]);
+      data.next48Hours[i].pressure[3][1] = (data.now.pressure[0] + data.now.pressure[1]) / 2;
+      data.next48Hours[i].pressure[3][2] = Math.min(data.now.pressure[0], data.now.pressure[1]);
+    }
   }
 }
 

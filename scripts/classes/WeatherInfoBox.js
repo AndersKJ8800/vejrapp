@@ -67,19 +67,51 @@ class WeatherInfoBox
     }
     else
     {
-      dataSet = data[currentDataSet][mouseOverDataN];
+      dataSet = data[currentDataSet][mouseOverDataN - 1];
     }
     if (parsedData == 4)
     {
+      this.dW.push();
       this.updateHighlight(dataSet, 42069);
-      this.dW.text(this.dW.timeAndDate, 0, 180);
-      this.dW.textSize(80);
-      this.dW.text(" " + round(dataSet.temperature[3][1]) + "°", 0, 100);
+      this.dW.text(this.dW.timeAndDate, 0, 200);
+      this.dW.textSize(100);
+      this.dW.text(" " + round(dataSet.temperature[3][1]) + "°", 0, 110);
       this.dW.textAlign(LEFT, TOP);
       this.dW.textSize(50);
-      this.dW.text(round(dataSet.precipitation[3][1]) + " mm", -50, 250);
+      let mm = round(dataSet.precipitation[3][1], 1).toString();
+      if (mm.includes(".")) mm = mm.replace(".", ",");
+      else mm = mm + ",0";
+      this.dW.translate(-50, 270);
+      this.dW.text(mm + " mm", 0, 0);
+      this.dW.image(miscIcons.precipitation, -54, 0);
+      let spacing = 80;
+      if (this.tables[0] == "luftfugtighed" || this.tables[1] == "luftfugtighed")
+      {
+        this.dW.translate(0, spacing);
+        this.dW.image(miscIcons.humidity, -55, 0);
+        this.dW.text(round(dataSet.humidity[3][1]) + " %", 0, 0);
+      }
+      if (this.tables[0] == "skydække" || this.tables[1] == "skydække")
+      {
+        this.dW.translate(0, spacing);
+        this.dW.image(miscIcons.cloudCover, -55, 0);
+        this.dW.text(round(dataSet.cloudCover[3][1]) + " %", 0, 0);
+      }
+      if (this.showSubGraph)
+      {
+        this.dW.translate(0, spacing);
+        this.dW.image(miscIcons.windSpeed, -55, 0);
+        this.dW.text(round(dataSet.windSpeed[3][1]) + " m/s", 0, 0);
+      }
+      if (this.showWindDirection)
+      {
+        this.dW.translate(0, spacing);
+        this.dW.image(miscIcons.windDirection, -55, 0);
+        this.dW.text(round(dataSet.windDirection[3][1]) + "°", 0, 0);
+      }
 
 
+      this.dW.pop();
     }
     this.dW.translate(-this.dW.width / 2, 0);
 

@@ -4,6 +4,7 @@
 function updateWeatherCoords()
 {
   let loc = weatherLocation.replace(/ /g, "+");
+  print("https://maps.googleapis.com/maps/api/geocode/json?address=" + loc + "&key=AIzaSyA6gpEIocAHIPsDmgv8Fuob3J7o_Cyu-7c");
   fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + loc + "&key=AIzaSyA6gpEIocAHIPsDmgv8Fuob3J7o_Cyu-7c")
   .then(response => response.json())
   .then(json => weatherCoords = [round(json.results[0].geometry.location.lat, 4), round(json.results[0].geometry.location.lng, 4)]);

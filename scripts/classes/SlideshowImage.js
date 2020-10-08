@@ -7,7 +7,7 @@ let slideshowButtonText = [];
 let weatherFeatures = // vis subgraf (bool), vis vindretning (bool), tabeller som skal vises i rækkefølge (array)
 {
   faldskærmsudspring: [true, true, ["skydække"]],
-  flyvning: [true, true, ["lufttryk", "skydække"]],
+  flyvning: [true, true, ["skydække"]],
   roning: [true, false, ["skydække"]],
   løb: [true, false, ["skydække", "luftfugtighed"]],
   mountainbiking: [false, null, ["skydække", "luftfugtighed"]],

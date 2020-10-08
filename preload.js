@@ -27,7 +27,6 @@ function preload()
     humidity: loadImage("assets/icons/humidity.png"),
     cloudCover: loadImage("assets/icons/cloudcover.png"),
     windSpeed: loadImage("assets/icons/windspeed.png"),
-    windDirection: loadImage("assets/icons/winddir.png"),
-    pressure: loadImage("assets/icons/pressure.png")
+    windDirection: loadImage("assets/icons/winddir.png")
   }
 }
